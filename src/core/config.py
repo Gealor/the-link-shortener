@@ -36,8 +36,12 @@ class DatabaseSettings(BaseModel):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(ENV_TEMPLATE, ENV_FILE),
-        case_sensitive=False,
-        env_nested_delimiter="__",
+        case_sensitive=False, # чувствительность к регистру
+        env_nested_delimiter="__", # обязательный параметр, если настройки поделены на разные классы, 
+    # в этом случае в .env у параметров указывается сначала имя переменной, в которой лежат переменные в python коде, 
+    # потом уже этот разделитель __ и после этого уже имя переменной окружения, 
+    # т.е. если мы в главном классе настроек Settings создали атрибут database, 
+    # то в .env переменные окружения должны начинаться с DATABASE__(либо database__, если у нас case_sensitive=True)
     )
 
     runtime: RuntimeSettings = RuntimeSettings()
