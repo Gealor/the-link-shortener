@@ -26,6 +26,7 @@ class DatabaseSettings(BaseModel):
     db_user: Annotated[str, Field(alias="POSTGRES_USER")]
     db_password: Annotated[str, Field(alias="POSTGRES_PASSWORD")]
     db_host: str = "localhost"
+    db_echo: bool = False
 
     @property
     def db_url(self):
