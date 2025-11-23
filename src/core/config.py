@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
-from pydantic import BaseModel
+from typing import Annotated
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,18 +17,31 @@ class LogSettings(BaseModel):
     datefmt: str = "%Y-%m-%d %H:%M:%S"
 
 class RuntimeSettings(BaseModel):
+    protocol: str = "http"
     host: str = '0.0.0.0'
     port: int = 8000
+
+class DatabaseSettings(BaseModel):
+    db_name: Annotated[str, Field(alias="POSTGRES_DB")]
+    db_user: Annotated[str, Field(alias="POSTGRES_USER")]
+    db_password: Annotated[str, Field(alias="POSTGRES_PASSWORD")]
+    db_host: str = "localhost"
+
+    @property
+    def db_url(self):
+        return f"postgresql+asyncpg://{self.db_user}:{self.db_password}@{self.db_host}:6000/{self.db_name}"
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(ENV_TEMPLATE, ENV_FILE),
         case_sensitive=False,
+        env_nested_delimiter="__",
     )
 
     runtime: RuntimeSettings = RuntimeSettings()
     logger: LogSettings = LogSettings()
-
+    database: DatabaseSettings
 
 settings = Settings()
 
