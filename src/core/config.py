@@ -17,9 +17,12 @@ class LogSettings(BaseModel):
     datefmt: str = "%Y-%m-%d %H:%M:%S"
 
 class RuntimeSettings(BaseModel):
-    protocol: str = "http"
     host: str = '0.0.0.0'
     port: int = 8000
+
+class FullSlugURLSettings(RuntimeSettings):
+    protocol: str = "http"
+    host: str = "localhost"
 
 class DatabaseSettings(BaseModel):
     db_name: Annotated[str, Field(alias="POSTGRES_DB")]
@@ -45,8 +48,11 @@ class Settings(BaseSettings):
     )
 
     runtime: RuntimeSettings = RuntimeSettings()
+    full_slug: FullSlugURLSettings = FullSlugURLSettings()
     logger: LogSettings = LogSettings()
     database: DatabaseSettings
+
+    count_repeating: int = 3
 
 settings = Settings()
 
