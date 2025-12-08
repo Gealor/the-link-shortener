@@ -8,5 +8,5 @@ from models.base import Base
 class ShortURL(Base, SlugIdPrimaryKeyMixin):
     __tablename__ = "short_urls"
 
-    full_url: Mapped[str] = mapped_column(nullable=False)
+    full_url: Mapped[str] = mapped_column(unique=True, nullable=False)
 
