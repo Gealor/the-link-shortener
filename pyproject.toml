@@ -14,11 +14,6 @@ dependencies = [
     "uvicorn>=0.38.0",
 ]
 
-[tool.ruff]
-exclude = [
-    "app/infrastructure/reindexer/grpc_client"
-]
-
 [tool.ruff.lint]
 ignore = ["E203", "E266", "E501", "C408", "B010", "F401", "C901", "B008"]
 select = ["B", "C", "E", "F", "W", "B9", "I"]
