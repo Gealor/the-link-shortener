@@ -13,7 +13,10 @@ from schemas.pydantic_schemas import URLShort
 from services import ShortenerService
 from services import get_shortener_service
 
-app = FastAPI()
+app = FastAPI(
+    title="Link Shortener",
+    description="This is pet-project Link Shortener"
+)
 
 origins = [
     "http://localhost:5500",
