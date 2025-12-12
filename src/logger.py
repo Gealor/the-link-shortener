@@ -1,4 +1,5 @@
 import logging
+
 from core.config import settings
 
 logging.basicConfig(

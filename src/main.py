@@ -1,13 +1,17 @@
 from typing import Annotated
-from fastapi import Depends, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+
 import uvicorn
+from fastapi import Depends
+from fastapi import FastAPI
+from fastapi import HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import settings
 from schemas.exceptions import InternalDatabaseException
-from schemas.pydantic_schemas import BodyCreateSlug, URLShort
-from services import ShortenerService, get_shortener_service
-
+from schemas.pydantic_schemas import BodyCreateSlug
+from schemas.pydantic_schemas import URLShort
+from services import ShortenerService
+from services import get_shortener_service
 
 app = FastAPI()
 
@@ -18,7 +22,7 @@ origins = [
     "http://127.0.0.1:3000",
     "http://localhost",
     "http://127.0.0.1",
-] # адреса, где расположен фронтэнд 
+] # адреса, где расположен фронтэнд
 
 app.add_middleware(
     CORSMiddleware, # для корректной работы с фронтэндом
@@ -43,7 +47,7 @@ async def make_short_url(
         raise HTTPException(
             status_code=500,
             detail="Error during format url. Please try again."
-        )
+        ) from None
 
 @app.get("/{code}")
 async def redirect(

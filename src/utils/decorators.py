@@ -1,9 +1,12 @@
 from functools import wraps
-from typing import Awaitable, Callable, ParamSpec, TypeVar
+from typing import Awaitable
+from typing import Callable
+from typing import ParamSpec
+from typing import TypeVar
 
-from schemas.exceptions import BaseShortnererUrlException
 from core.config import settings
 from logger import log
+from schemas.exceptions import BaseShortnererUrlException
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -24,4 +27,3 @@ def repeat_decorator(count: int = settings.count_repeating):
             raise BaseShortnererUrlException
         return wrapper
     return decorator
-                

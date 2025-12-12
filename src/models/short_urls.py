@@ -1,8 +1,8 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 
-
-from models.mixins.slug_id_pk_mixin import SlugIdPrimaryKeyMixin
 from models.base import Base
+from models.mixins.slug_id_pk_mixin import SlugIdPrimaryKeyMixin
 
 
 class ShortURL(Base, SlugIdPrimaryKeyMixin):

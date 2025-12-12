@@ -1,5 +1,11 @@
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, computed_field
+from pydantic import BaseModel
+from pydantic import ConfigDict
+from pydantic import Field
+from pydantic import HttpUrl
+from pydantic import computed_field
+
 from core.config import settings
+
 
 class BaseURL(BaseModel):
     full_url: HttpUrl = Field(examples=["https://google.com/?something=2345676812"])
@@ -9,7 +15,7 @@ class BodyCreateSlug(BaseURL):
 
 class URLShort(BaseURL):
     model_config = ConfigDict(from_attributes=True)
-    
+
     slug: str = Field(examples=["9DwYb3"])
 
     @computed_field
