@@ -34,7 +34,7 @@ class ShortenerService:
         if record := await self.repo.get_record_by_full_url(full_url=str_url):
             log.info("Slug with these url already exist. Return existed record")
             return URLShort(
-                full_url=url, 
+                full_url=url,
                 slug=record.slug,
             )
 
