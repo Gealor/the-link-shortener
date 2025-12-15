@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from logger import log
 from repositories.shortener_url_repository import ShortenerURLRepository
 from schemas.exceptions import SlugAlreadyExistsException
+from schemas.exceptions import URLBySlugDontExistException
 from schemas.pydantic_schemas import CreateShortURL
 from schemas.pydantic_schemas import URLShort
 from utils.decorators import repeat_decorator
@@ -18,8 +19,8 @@ class ShortenerService:
         self.session = session
         self.repo = ShortenerURLRepository(session=self.session)
 
-    def _generate_random_code(self) -> str:
-        return "".join([choice(ALPHABET) for _ in range(6)])
+    def _generate_random_code(self, length: int = 6) -> str:
+        return "".join([choice(ALPHABET) for _ in range(length)])
 
     @repeat_decorator()
     async def _generate_code_without_repeating(self) -> str:
@@ -49,6 +50,13 @@ class ShortenerService:
 
         return URLShort.model_validate(record)
 
+    async def get_full_url_by_slug(self, code: str) -> URLShort:
+        record = await self.repo.get_record_by_slug(slug=code)
+        if record is None:
+            log.error("Failed to found URL by this slug")
+            raise URLBySlugDontExistException
+        log.info("Found URL by slug %s: %s", code, record.full_url)
+        return URLShort.model_validate(record)
 
 
 
