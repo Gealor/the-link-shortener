@@ -25,11 +25,10 @@ class ShortenerURLRepository:
         return record
 
     async def create_record(self, short_url: CreateShortURL) -> ShortURL | None:
+        dict_record = short_url.model_dump()
+        stmt = insert(ShortURL).values(**dict_record).returning(ShortURL)
         try:
-            dict_record = short_url.model_dump()
-            stmt = insert(ShortURL).values(**dict_record).returning(ShortURL)
-
-            result = await self.session.scalar(stmt)
+            result = await self.session.scalar(stmt) # как только мы делаем await - это знак того, что идет обращение в базу данных, а не работа с кодом
         except IntegrityError as e:
             log.error("Failed to save record in database: %s", e)
             await self.session.rollback()
