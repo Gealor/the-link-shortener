@@ -6,7 +6,7 @@ from typing import TypeVar
 
 from core.config import settings
 from logger import log
-from schemas.exceptions import BaseShortnererUrlException
+from schemas.exceptions import OutOfAttemptsForRepeatException
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -24,6 +24,6 @@ def repeat_decorator(count: int = settings.count_repeating):
                     remaining_attempts-=1
                 else:
                     return result
-            raise BaseShortnererUrlException
+            raise OutOfAttemptsForRepeatException
         return wrapper
     return decorator
