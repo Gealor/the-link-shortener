@@ -7,9 +7,15 @@ class InvalidURLFormatException(BaseShortnererUrlException):
 class InternalDatabaseException(BaseShortnererUrlException):
     pass
 
+class OutOfAttemptsForRepeatException(BaseShortnererUrlException):
+    pass
+
 class SlugAlreadyExistsException(BaseShortnererUrlException):
     def __init__(self, msg: str):
         self.msg = msg
 
     def __repr__(self):
         return self.msg
+
+class URLBySlugDontExistException(BaseShortnererUrlException):
+    pass
