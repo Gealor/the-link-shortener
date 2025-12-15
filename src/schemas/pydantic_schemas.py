@@ -7,6 +7,7 @@ from pydantic import computed_field
 from core.config import settings
 
 
+# TODO: попробовать поискать валидации deeplink'ов
 class BaseURL(BaseModel):
     full_url: HttpUrl = Field(examples=["https://google.com/?something=2345676812"])
 
