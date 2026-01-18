@@ -2,7 +2,6 @@ import string
 from random import choice
 
 from pydantic import HttpUrl
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from logger import log
 from repositories.shortener_url_repository import ShortenerURLRepository
@@ -15,9 +14,8 @@ from utils.decorators import repeat_decorator
 ALPHABET: str = string.ascii_letters + string.digits
 
 class ShortenerService:
-    def __init__(self, session: AsyncSession):
-        self.session = session
-        self.repo = ShortenerURLRepository(session=self.session)
+    def __init__(self, repo: ShortenerURLRepository):
+        self.repo = repo
 
     def _generate_random_code(self, length: int = 6) -> str:
         return "".join([choice(ALPHABET) for _ in range(length)])
