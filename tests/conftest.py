@@ -1,8 +1,8 @@
 from typing import AsyncGenerator
 from typing import Generator
 
-from pydantic import HttpUrl
 import pytest
+from pydantic import HttpUrl
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import async_sessionmaker
