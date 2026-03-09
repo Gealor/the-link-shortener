@@ -30,12 +30,13 @@ class DatabaseSettings(BaseModel):
     db_name: Annotated[str, Field(alias="POSTGRES_DB")]
     db_user: Annotated[str, Field(alias="POSTGRES_USER")]
     db_password: Annotated[str, Field(alias="POSTGRES_PASSWORD")]
-    db_host: str = "localhost"
+    db_host: str = Field(default="localhost", alias="POSTGRES_HOST")
+    db_port: int = Field(default=6000, alias="POSTGRES_PORT")
     db_echo: bool = False
 
     @property
     def db_url(self):
-        return f"postgresql+asyncpg://{self.db_user}:{self.db_password}@{self.db_host}:6000/{self.db_name}"
+        return f"postgresql+asyncpg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
 
 
 class Settings(BaseSettings):

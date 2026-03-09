@@ -35,6 +35,6 @@ log_cli = true
 log_cli_level = "INFO"
 addopts = "-p no:warnings"
 asyncio_mode = "auto"
-asyncio_default_fixture_loop_scope = "session"
+asyncio_default_fixture_loop_scope = "session" # желательно поставить scope = "function" для обоих случаев и поставить "function" scope для фикстуры engine, чтобы точно избежать влияния тестов друг на друга
 asyncio_default_test_loop_scope = "session" # нужно, чтобы задать время жизни event_loop(для асинхронности) для тестов,
 # в нашем случае event_loop будет создан для всех тестов один(на период все сессии тестирования)

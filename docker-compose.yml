@@ -3,6 +3,13 @@ networks:
   dev:
 
 services:
+  app:
+    build: .
+    ports:
+      - 8000:8000
+    networks:
+      - dev
+
   db:
     image: postgres
     env_file:
