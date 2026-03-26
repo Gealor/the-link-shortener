@@ -26,7 +26,13 @@ class FullSlugURLSettings(RuntimeSettings):
     protocol: str = "http"
     host: str = "localhost"
 
-class DatabaseSettings(BaseModel):
+class DatabaseSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=(ENV_TEMPLATE, ENV_FILE),
+        case_sensitive=False,
+        extra="ignore", # Игнорировать другие переменные в .env
+    )
+
     db_name: Annotated[str, Field(alias="POSTGRES_DB")]
     db_user: Annotated[str, Field(alias="POSTGRES_USER")]
     db_password: Annotated[str, Field(alias="POSTGRES_PASSWORD")]
@@ -48,12 +54,13 @@ class Settings(BaseSettings):
     # потом уже этот разделитель __ и после этого уже имя переменной окружения,
     # т.е. если мы в главном классе настроек Settings создали атрибут database,
     # то в .env переменные окружения должны начинаться с DATABASE__(либо database__, если у нас case_sensitive=True)
+        extra="ignore",
     )
 
     runtime: RuntimeSettings = RuntimeSettings()
     full_slug: FullSlugURLSettings = FullSlugURLSettings()
     logger: LogSettings = LogSettings()
-    database: DatabaseSettings
+    database: DatabaseSettings = Field(default_factory=DatabaseSettings)
 
     count_repeating: int = 3
 
