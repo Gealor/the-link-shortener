@@ -3,6 +3,13 @@ networks:
   dev:
 
 services:
+  frontend:
+    build: ./frontend_new
+    ports:
+      - 5500:5500
+    networks:
+      - dev
+
   app:
     build: .
     ports:
