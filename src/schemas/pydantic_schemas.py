@@ -21,7 +21,7 @@ class URLShort(BaseURL):
 
     @computed_field
     def full_slug(self) -> str:
-        return f"{settings.full_slug.protocol}://{settings.full_slug.host}:{settings.runtime.port}/{self.slug}"
+        return f"{settings.full_slug.protocol}://{settings.full_slug.host}:{settings.runtime.port}/api/{self.slug}"
 
 
 
