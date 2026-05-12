@@ -8,7 +8,8 @@
     <div class="card">
       <div class="card-inner">
         <transition name="fade" mode="out-in">
-
+          <!-- v-model='url' значит, что мы привязываем значение к переменной url, 
+          внутри компонента UrlInput мы используем modelValue для получения этого значения и update:modelValue для его обновления.  -->
           <UrlInput
             v-if="!result"
             key="input"
