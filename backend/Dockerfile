@@ -9,6 +9,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY . /app
 
 ENV UV_NO_DEV=1
+# в каком каталоге искать модули и пакеты при импорте, пути указанные в PYTHONPATH добавляются в sys.path (вот где их можно посмотреть)
 ENV PYTHONPATH=/app
 
 WORKDIR /app
