@@ -70,6 +70,6 @@ async def redirect(
         ) from exc
     return RedirectResponse(
         url=str(result.full_url),
-        status_code=status.HTTP_301_MOVED_PERMANENTLY,
+        status_code=status.HTTP_302_FOUND,
     ) # для редиректов используются коды ответов 301 либо 302,
 # разница в том, что при 301 браузер автоматически кеширует ссылку и при переходе на нее повторно уже не будет делаться запрос на бэкенд (не всегда, это зависит от заголовков кэширования)
