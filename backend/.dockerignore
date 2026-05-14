@@ -1,3 +1,4 @@
+# .dockerignore должен находиться рядом с Dockerfile!!!
 # Git
 .git
 .gitignore
@@ -56,6 +57,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 tests/
+test.py
 
 # Translations
 *.mo
