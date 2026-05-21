@@ -44,6 +44,21 @@ class DatabaseSettings(BaseSettings):
     def db_url(self):
         return f"postgresql+asyncpg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
 
+class RedisSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=(ENV_TEMPLATE, ENV_FILE),
+        case_sensitive=False,
+        extra="ignore", # Игнорировать другие переменные в .env
+    )
+
+    host: Annotated[str, Field(alias="REDIS_HOST")]
+    port: Annotated[int, Field(alias="REDIS_PORT")]
+
+class RateLimitSettings(BaseModel):
+    topic_name: str = "rate_limiter"
+    window_size: int = 10
+    ttl_seconds: int = window_size*2
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -61,6 +76,8 @@ class Settings(BaseSettings):
     full_slug: FullSlugURLSettings = FullSlugURLSettings()
     logger: LogSettings = LogSettings()
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
+    redis: RedisSettings = Field(default_factory=RedisSettings)
+    rate_limiter: RateLimitSettings = RateLimitSettings()
 
     count_repeating: int = 3
 
