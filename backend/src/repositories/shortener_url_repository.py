@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.logger import log
+from src.core.logger import log
 from src.models.short_urls import ShortURL
 from src.schemas.exceptions import InternalDatabaseException
 from src.schemas.pydantic_schemas import CreateShortURL

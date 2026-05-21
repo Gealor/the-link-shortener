@@ -1,13 +1,29 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api import main_router
 from src.core.config import settings
+from src.lifespan_app import Lifespan
+
+lifespan_manager = Lifespan()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    await lifespan_manager.startup()
+    yield
+    # Shutdown
+    await lifespan_manager.shutdown()
+
 
 app = FastAPI(
     title="Link Shortener",
-    description="This is pet-project Link Shortener"
+    description="This is pet-project Link Shortener",
+    lifespan=lifespan
 )
 
 origins = [

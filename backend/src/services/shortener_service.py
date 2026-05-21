@@ -3,7 +3,7 @@ from random import choice
 
 from pydantic import HttpUrl
 
-from src.logger import log
+from src.core.logger import log
 from src.repositories.shortener_url_repository import ShortenerURLRepository
 from src.schemas.exceptions import SlugAlreadyExistsException
 from src.schemas.exceptions import URLBySlugDontExistException

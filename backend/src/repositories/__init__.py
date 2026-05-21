@@ -3,7 +3,7 @@ __all__ = ("get_shortener_url_repository",)
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.database import db_session_getter
+from src.dependencies.database import db_session_getter
 from src.repositories.shortener_url_repository import ShortenerURLRepository
 
 

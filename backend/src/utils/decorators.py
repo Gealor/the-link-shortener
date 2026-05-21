@@ -5,7 +5,7 @@ from typing import ParamSpec
 from typing import TypeVar
 
 from src.core.config import settings
-from src.logger import log
+from src.core.logger import log
 from src.schemas.exceptions import OutOfAttemptsForRepeatException
 
 P = ParamSpec("P")
