@@ -9,7 +9,7 @@ from core.logger import log
 from src.core.rate_limiters import RateLimiterProtocol
 from src.core.rate_limiters import RateLimiterSlidingWindowCounter
 from src.core.rate_limiters import RateLimiterSlidingWindowLog
-from src.core.redis_client import get_redis_client
+from src.dependencies.redis_client import get_redis_client
 
 
 def get_rate_limiter(

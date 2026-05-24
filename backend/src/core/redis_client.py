@@ -7,5 +7,3 @@ redis_client: Redis = Redis(
     port=settings.redis.port,
 )
 
-def get_redis_client() -> Redis:
-    return redis_client
