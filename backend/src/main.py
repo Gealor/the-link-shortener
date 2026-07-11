@@ -29,10 +29,7 @@ app = FastAPI(
 origins = [
     "http://localhost:5500",
     "http://127.0.0.1:5500",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost",
-    "http://127.0.0.1",
+    "http://frontend:5500",
 ] # адреса, где расположен фронтэнд, чтобы CORS выполнил запросы к API, отправленные с этих адресов
 
 app.add_middleware(
