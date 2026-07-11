@@ -27,4 +27,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 1. Drag windows on Desktop
 2. Minimize, Maximize, Close window functional
 3. TaskBar functional and scaling add applications
-4. (TODO) Start menu button functional (Start Menu component)
+4. Start menu button functional (Start Menu component)
+5. Priority windows with z-index
+6. About Me Application (My Computer)
