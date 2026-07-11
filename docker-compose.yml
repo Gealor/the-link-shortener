@@ -4,7 +4,7 @@ networks:
 
 services:
   frontend:
-    build: ./frontend_new
+    build: ./frontend
     ports:
       - 5500:5500
     networks:
