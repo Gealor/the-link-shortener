@@ -213,7 +213,10 @@ defineExpose({
     word-break: break-word;
 }
 
-.grid-icon.selected span {
+/* .grid-icon - класс, который применяется к компоненту, 
+.selected - вспомогательный класс, который дополняет стиль при его включении в компонент вместе с .grid-icon, 
+span - тег, к которому применяется данный стиль */
+.grid-icon.selected span { 
     background-color: #0a246a;
 }
 
