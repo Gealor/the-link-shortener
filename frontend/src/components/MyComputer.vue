@@ -215,9 +215,6 @@ defineExpose({
 
 .grid-icon.selected span {
     background-color: #0a246a;
-    color: #fff;
-    outline: 1px dotted #fff;
-    outline-offset: -1px;
 }
 
 .sunken-panel {

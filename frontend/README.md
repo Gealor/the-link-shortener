@@ -12,6 +12,10 @@ npm install
 npm run serve -- --port 5500
 ```
 
+```cli for vite
+npm run dev
+```
+
 ### Compiles and minifies for production
 
 ```cli

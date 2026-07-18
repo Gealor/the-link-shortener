@@ -138,15 +138,9 @@ const listTools = ["Edit", "Edit", "View", "Favorites", "Tools", "Help"]
     border: 1px solid transparent;
 }
 
-.menuitem:hover {
-    border: 1px solid #404040;
-    box-shadow: inset 1px 1px 0 #fff;
-}
-
 .menuitem:active {
-    border: 1px solid #404040;
-    box-shadow: inset 1px 1px 0 #808080;
-    background: #c0c0c0;
+    outline: 1px dotted #000000;
+    outline-offset: -1px;
 }
 
 /* URL-field */

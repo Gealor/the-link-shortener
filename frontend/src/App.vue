@@ -146,4 +146,10 @@ function getZIndex(id) {
     background-position: center;
     background-size: cover;
 }
+
+.grid-icon.selected span {
+    color: #fff;
+    outline: 1px dotted #fff;
+    outline-offset: -1px;
+}
 </style>
