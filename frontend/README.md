@@ -13,7 +13,7 @@ npm run serve -- --port 5500
 ```
 
 ```cli for vite
-npm run dev
+npm run dev -- --port 5500
 ```
 
 ### Compiles and minifies for production
@@ -35,3 +35,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 5. About Me Application (My Computer)
 6. (TODO) Start menu button functional (Start Menu component)
 7. (TODO) Dynamical resize windows
+8. (TODO) Add functional for close window with right mouse button
+9. (TODO) Icons on Desktop 
+10. (TODO) Add Calculator and Paint
