@@ -19,7 +19,7 @@
             <div class="vertical-separator-white"></div>
         </div>
 
-        <div class="quick-launch" style="margin-right: 20px">
+        <div class="quick-launch">
             <img 
                 v-for="app in quickLaunchApps"
                 :key="app.id"
@@ -49,7 +49,7 @@
             <div class="vertical-separator-black"></div>
         </div>
 
-        <div class="field-border-disabled notification-area" style="padding: 4px">
+        <div class="field-border-disabled notification-area">
             <div class="notification-icons">
                 <img :src="mouseIcon" alt="Mouse" class="notification-area-icon">
                 <img :src="loudspeakerIcon" alt="Loudspeaker" class="notification-area-icon">
@@ -147,6 +147,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     gap: 2px;
+    margin-right: 20px;
 }
 
 /* Кнопка задачи */
@@ -197,6 +198,7 @@ onUnmounted(() => {
     gap: 2px;
     height: 30px;
     width: 150px;
+    padding: 4px;
 }
 
 .notification-area .btn-text {

@@ -1,21 +1,20 @@
 <template>
-    <div class="bar-header" style="height: 30px;">
+    <div class="bar-header bar-header--menu">
         <!-- Меню -->
         <div class="separator">
             <div class="vertical-separator-white"></div>
         </div>
-        <div 
-            v-for="(elem, index) in listTools" 
-            class="menuitem" 
+        <div
+            v-for="(elem, index) in listTools"
+            class="menuitem"
             :tabindex="index"
-            style="user-select: none;"
         >
             <span class="mnemonic">{{ elem[0] }}</span>{{ elem.slice(1) }}
         </div>
     </div>
 
     <!-- Действия -->
-    <div class="bar-header" style="height: 45px;">
+    <div class="bar-header bar-header--actions">
         <div class="separator">
             <div class="vertical-separator-white"></div>
         </div>
@@ -32,14 +31,14 @@
     </div>
 
     <!-- Поиск -->
-    <div class="bar-header" style="height: 30px;">
+    <div class="bar-header bar-header--search">
         <div class="separator">
             <div class="vertical-separator-white"></div>
         </div>
         <div>
             <span class="mnemonic">A</span>ddress
         </div>
-        <div class="field-border url-field" style="height: 95%; width: 100%;">
+        <div class="field-border url-field">
             <img :src="icon" alt="InternetExplorerIcon" class="little-icon">
             <span class="url-text">{{ url }}</span>
             <button class="url-dropdown">▼</button>
@@ -91,6 +90,15 @@ const toolbarButtons = [
     border-bottom: 2px solid #5c5c5c;
 }
 
+.bar-header--menu,
+.bar-header--search {
+    height: 30px;
+}
+
+.bar-header--actions {
+    height: 45px;
+}
+
 .toolbar-btn {
     display: flex;
     flex-direction: column;       /* иконка сверху, текст снизу */
@@ -118,6 +126,7 @@ const toolbarButtons = [
     cursor: pointer;
     padding: 1px 5px;
     border: 1px solid transparent;
+    user-select: none;
 }
 
 .menuitem:active {
@@ -127,9 +136,11 @@ const toolbarButtons = [
 
 /* URL-field */
 .url-field {
-    display: flex; 
+    display: flex;
     align-items: center;
     padding-left: 4px;
+    height: 95%;
+    width: 100%;
 }
 
 .url-text {
