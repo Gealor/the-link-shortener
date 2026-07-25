@@ -29,13 +29,42 @@
                 <span>{{ mainTitle }}</span>
             </p>
         </div>
+
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--right"
+            @mousedown="startResize(ResizeDirection.RIGHT, $event)"
+        ></div>
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--left"
+            @mousedown="startResize(ResizeDirection.LEFT, $event)"
+        ></div>
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--bottom"
+            @mousedown="startResize(ResizeDirection.BOTTOM, $event)"
+        ></div>
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--top"
+            @mousedown="startResize(ResizeDirection.TOP, $event)"
+        ></div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, useSlots } from 'vue';
 
 import missingIcon from '../assets/icons/msagent-3.png'
+import ApplicationHead from './ApplicationHead.vue'
+
+// Минимальные размеры окна по умолчанию - отдельно для окон с ApplicationHead
+// занимают fixed-высоту и не сжимаются меньше определённой ширины) и без него
+const MIN_WIDTH_WITH_HEADER = 450
+const MIN_HEIGHT_WITH_HEADER = 220
+const MIN_WIDTH_DEFAULT = 200
+const MIN_HEIGHT_DEFAULT = 120
 
 const props = defineProps({
     title: {
@@ -58,6 +87,14 @@ const props = defineProps({
         default: 400,
     },
     height: Number,
+    minWidth: {
+        type: Number,
+        default: null,
+    },
+    minHeight: {
+        type: Number,
+        default: null,
+    },
     zIndex: {
         type: Number,
         default: () => Number(getComputedStyle(document.documentElement).getPropertyValue('--z-windows-base')) || 100,
@@ -75,6 +112,35 @@ const pos = ref({ x: 100, y: 100 });
 // Переменные для перетаскивания окна
 const dragOffset = ref({ x: 0, y: 0 });
 const isDragging = ref(false);
+
+// Размер окна
+const size = ref({ width: props.width, height: props.height ?? null })
+
+// используется ли в слоте ApplicationHead,
+// чтобы автоматически подобрать разумный минимальный размер окна под его содержимое
+const slots = useSlots()
+const hasApplicationHead = computed(() => {
+    const nodes = slots.default?.() ?? []
+    return nodes.some(vnode => vnode.type === ApplicationHead)
+})
+
+const effectiveMinWidth = computed(() =>
+    props.minWidth ?? (hasApplicationHead.value ? MIN_WIDTH_WITH_HEADER : MIN_WIDTH_DEFAULT)
+)
+const effectiveMinHeight = computed(() =>
+    props.minHeight ?? (hasApplicationHead.value ? MIN_HEIGHT_WITH_HEADER : MIN_HEIGHT_DEFAULT)
+)
+
+// Переменные для ресайза окна
+const ResizeDirection = Object.freeze({
+    RIGHT: 'right',
+    LEFT: 'left',
+    BOTTOM: 'bottom',
+    TOP: 'top',
+})
+const isResizing = ref(false)
+const resizeDirection = ref(null) // одно из значений ResizeDirection
+const resizeStart = ref({ x: 0, y: 0, width: 0, height: 0, posX: 0, posY: 0 })
 
 // Состояние окна
 const isOpen = ref(true)
@@ -98,13 +164,13 @@ const windowStyle = computed(() => {
         left: pos.value.x + 'px',
         top: pos.value.y + 'px',
         position: 'fixed',
-        width: props.width + 'px',
-        zIndex: props.zIndex, // z-index - это свойство CSS, которое определяет порядок наложения элементов на странице. 
+        width: size.value.width + 'px',
+        zIndex: props.zIndex, // z-index - это свойство CSS, которое определяет порядок наложения элементов на странице.
         // Элементы с более высоким z-index будут отображаться поверх элементов с более низким z-index.
     }
 
-    if (!isMinimized.value && props.height) {
-        style.height = props.height + 'px'
+    if (!isMinimized.value && size.value.height) {
+        style.height = size.value.height + 'px'
     }
 
     return style;
@@ -121,7 +187,8 @@ function toggleMaximize() {
 }
 
 function close() {
-    pos.value = { x: defaultPos.value.x, y: defaultPos.value.y }    
+    pos.value = { x: defaultPos.value.x, y: defaultPos.value.y }
+    size.value = { width: props.width, height: props.height ?? null }
     isMinimized.value = false
     isMaximized.value = false
     isOpen.value = false
@@ -153,6 +220,79 @@ function stopDrag() {
     window.removeEventListener('mouseup', stopDrag)
 }
 
+function startResize(direction, event) {
+    if (isMaximized.value) return
+    event.preventDefault() // чтобы перенос не выделял текст на странице
+    isResizing.value = true
+    resizeDirection.value = direction
+    resizeStart.value = {
+        x: event.clientX,
+        y: event.clientY,
+        width: size.value.width,
+        height: size.value.height ?? windowEl.value.getBoundingClientRect().height,
+        posX: pos.value.x,
+        posY: pos.value.y,
+    }
+    window.addEventListener('mousemove', onResize)
+    window.addEventListener('mouseup', stopResize)
+}
+
+
+// Обработчики стороны
+function resizeRight(event) {
+    const delta = event.clientX - resizeStart.value.x
+    size.value.width = Math.max(effectiveMinWidth.value, resizeStart.value.width + delta);
+}
+
+function resizeLeft(event) {
+    // Растягиваем влево: правый край должен остаться на месте,
+    // поэтому позицию (x) сдвигаем ровно на столько, на сколько реально изменилась ширина
+    const delta = event.clientX - resizeStart.value.x
+    const newWidth = Math.max(effectiveMinWidth.value, resizeStart.value.width - delta)
+    pos.value.x = resizeStart.value.posX + (resizeStart.value.width - newWidth)
+    size.value.width = newWidth
+}
+
+function resizeBottom(event) {
+    const delta = event.clientY - resizeStart.value.y
+    size.value.height = Math.max(effectiveMinHeight.value, resizeStart.value.height + delta)
+}
+
+function resizeTop(event) {
+    // Растягиваем вверх: нижний край должен остаться на месте
+    const delta = event.clientY - resizeStart.value.y
+    const newHeight = Math.max(effectiveMinHeight.value, resizeStart.value.height - delta)
+    pos.value.y = resizeStart.value.posY + (resizeStart.value.height - newHeight)
+    size.value.height = newHeight
+}
+
+// Регистр, который ставит в соответствие одной стороне некоторый обработчик 
+const mapDirectionToHandle = {
+    [ResizeDirection.RIGHT]: resizeRight,
+    [ResizeDirection.LEFT]: resizeLeft,
+    [ResizeDirection.BOTTOM]: resizeBottom,
+    [ResizeDirection.TOP]: resizeTop,
+}
+
+function onResize(event) {
+    if (!isResizing.value) return
+
+    const handler = mapDirectionToHandle[resizeDirection.value]
+    if (!handler) {
+        console.warn("Не найден обработчик для направления")
+        return
+    }
+
+    handler(event)
+}
+
+function stopResize() {
+    isResizing.value = false
+    resizeDirection.value = null
+    window.removeEventListener('mousemove', onResize)
+    window.removeEventListener('mouseup', stopResize)
+}
+
 function open() {
     isOpen.value = true;
     isMinimized.value = false;
@@ -171,6 +311,8 @@ onMounted(() => {
 onUnmounted(() => {
     window.removeEventListener('mousemove', onDrag)
     window.removeEventListener('mouseup', stopDrag)
+    window.removeEventListener('mousemove', onResize)
+    window.removeEventListener('mouseup', stopResize)
 });
 
 </script>
@@ -194,5 +336,41 @@ onUnmounted(() => {
     min-height: 0;
     display: flex;
     flex-direction: column;
+}
+
+.resize-handle {
+    position: absolute;
+}
+
+.resize-handle--right {
+    top: 0;
+    right: -3px;
+    width: 6px;
+    height: 100%;
+    cursor: ew-resize;
+}
+
+.resize-handle--bottom {
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 6px;
+    cursor: ns-resize;
+}
+
+.resize-handle--left {
+    top: 0;
+    left: -3px;
+    width: 6px;
+    height: 100%;
+    cursor: ew-resize;
+}
+
+.resize-handle--top {
+    left: 0;
+    top: -3px;
+    width: 100%;
+    height: 6px;
+    cursor: ns-resize;
 }
 </style>
