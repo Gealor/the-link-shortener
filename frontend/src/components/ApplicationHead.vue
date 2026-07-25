@@ -19,45 +19,16 @@
         <div class="separator">
             <div class="vertical-separator-white"></div>
         </div>
-        
-        <div class="toolbar-btn">
-            <img :src="stopIcon" alt="Stop" class="toolbar-icon" />
-            <span class="toolbar-label">Stop</span>
-        </div>
-        <div class="toolbar-btn">
-            <img :src="homeIcon" alt="Home" class="toolbar-icon" />
-            <span class="toolbar-label">Home</span>
-        </div>
 
-        <div class="separator">
-            <div class="vertical-separator-black"></div>
-        </div>
-
-        <div class="toolbar-btn">
-            <img :src="searchIcon" alt="Search" class="toolbar-icon" />
-            <span class="toolbar-label">Search</span>
-        </div>
-        <div class="toolbar-btn">
-            <img :src="favoriteIcon" alt="Favorite" class="toolbar-icon" />
-            <span class="toolbar-label">Favorite</span>
-        </div>
-        <div class="toolbar-btn">
-            <img :src="historyIcon" alt="History" class="toolbar-icon" />
-            <span class="toolbar-label">History</span>
-        </div>
-
-        <div class="separator">
-            <div class="vertical-separator-black"></div>
-        </div>
-
-        <div class="toolbar-btn">
-            <img :src="mailIcon" alt="Mail" class="toolbar-icon" />
-            <span class="toolbar-label">Mail</span>
-        </div>
-        <div class="toolbar-btn">
-            <img :src="printIcon" alt="Print" class="toolbar-icon" />
-            <span class="toolbar-label">Print</span>
-        </div>
+        <template v-for="btn in toolbarButtons" :key="btn.id">
+            <div v-if="btn.divider" class="separator">
+                <div class="vertical-separator-black"></div>
+            </div>
+            <div class="toolbar-btn">
+                <img :src="btn.icon" :alt="btn.title" class="toolbar-icon" />
+                <span class="toolbar-label">{{ btn.title }}</span>
+            </div>
+        </template>
     </div>
 
     <!-- Поиск -->
@@ -91,6 +62,17 @@ defineProps({
 })
 
 const listTools = ["Edit", "Edit", "View", "Favorites", "Tools", "Help"]
+
+// Разделитель указывается прямо в объекте кнопки — рендерится перед ней
+const toolbarButtons = [
+    { id: 'stop', title: 'Stop', icon: stopIcon },
+    { id: 'home', title: 'Home', icon: homeIcon },
+    { id: 'search', title: 'Search', icon: searchIcon, divider: true },
+    { id: 'favorite', title: 'Favorite', icon: favoriteIcon },
+    { id: 'history', title: 'History', icon: historyIcon },
+    { id: 'mail', title: 'Mail', icon: mailIcon, divider: true },
+    { id: 'print', title: 'Print', icon: printIcon },
+]
 </script>
 
 <style scoped>
