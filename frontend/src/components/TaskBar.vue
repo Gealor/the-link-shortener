@@ -108,7 +108,7 @@ function updateTime() {
     const minutes = now.getMinutes().toString().padStart(2, '0')
     const ampm = hours >= 12 ? 'PM' : 'AM'
     hours = hours % 12 || 12
-    currentTime.value = `${hours}:${minutes} ${ampm}`
+    currentTime.value = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`
 }
 let intervalId
 
@@ -132,6 +132,7 @@ onUnmounted(() => {
     left: 0;
     width: 100%;
     height: var(--taskbar-height);
+    z-index: var(--z-taskbar); /* панель задач всегда должна быть выше окон приложений */
     display: flex;
     align-items: center;
     gap: 4px;
@@ -186,6 +187,7 @@ onUnmounted(() => {
     white-space: nowrap;
     font-size: 13px;
     min-width: 0;   
+    font-family: var(--font-family-default);
 }
 
 /* Область уведомлений */
