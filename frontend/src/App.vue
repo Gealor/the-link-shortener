@@ -1,4 +1,12 @@
 <template>
+  <TaskBar 
+    :open-apps="openWindows"
+    :quick-launch-apps="quickLaunchApps"
+    style="z-index: var(--z-start-menu);"
+    @launch-app="launchApp"
+    @focus-app="focusApp"
+  />
+
   <!-- Компонент для динамического рендеринга, какой компонент отрисовать определяет атрибут :is -->
   <component 
     v-for="app in openWindows"
@@ -14,13 +22,6 @@
     :z-index="getZIndex(app.id)" 
     @close="closeApp(app.id)"
     @focus="bringToFront(app.id)"
-  />
-
-  <TaskBar 
-    :open-apps="openWindows"
-    :quick-launch-apps="quickLaunchApps"
-    @launch-app="launchApp"
-    @focus-app="focusApp"
   />
 </template>
 
@@ -66,11 +67,17 @@ function bringToFront(id) {
     ]
 }
 
-// z-index - это свойство CSS, которое определяет порядок наложения элементов на странице. 
+// Базовый z-index окон берётся из CSS-переменной --z-windows-base (src/styles/global.css),
+// чтобы не дублировать число ещё и в JS
+const windowsBaseZIndex = Number(
+    getComputedStyle(document.documentElement).getPropertyValue('--z-windows-base')
+) || 100
+
+// z-index - это свойство CSS, которое определяет порядок наложения элементов на странице.
 // Элементы с более высоким z-index будут отображаться поверх элементов с более низким z-index.
 function getZIndex(id) {
     const index = windowOrder.value.indexOf(id)
-    return 100 + index  // базовый z-index + позиция
+    return windowsBaseZIndex + index  // базовый z-index + позиция
 }
 
 </script>
@@ -145,11 +152,5 @@ function getZIndex(id) {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-}
-
-.grid-icon.selected span {
-    color: #fff;
-    outline: 1px dotted #fff;
-    outline-offset: -1px;
 }
 </style>
