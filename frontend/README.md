@@ -34,3 +34,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 4. Priority windows with z-index
 5. About Me Application (My Computer)
 6. (TODO) Start menu button functional (Start Menu component)
+7. (TODO) Dynamical resize windows
