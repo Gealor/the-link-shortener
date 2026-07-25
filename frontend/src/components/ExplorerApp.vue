@@ -72,5 +72,6 @@ defineExpose({ // пробрасываемые методы, чтобы роди
 
 .sunken-panel {
     padding: 10px;
+    background-image: url('@/assets/background-2.jpg');
 }
 </style>

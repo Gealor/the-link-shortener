@@ -148,7 +148,6 @@ function getZIndex(id) {
 .sunken-panel {
     flex: 1;
     min-height: 0;
-    background-image: url('@/assets/background-2.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
