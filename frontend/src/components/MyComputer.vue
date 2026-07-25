@@ -216,8 +216,11 @@ defineExpose({
 /* .grid-icon - класс, который применяется к компоненту, 
 .selected - вспомогательный класс, который дополняет стиль при его включении в компонент вместе с .grid-icon, 
 span - тег, к которому применяется данный стиль */
-.grid-icon.selected span { 
-    background-color: #0a246a;
+.grid-icon.selected span {
+    background-color: var(--color-highlight);
+    color: #fff;
+    outline: 1px dotted #fff;
+    outline-offset: -1px;
 }
 
 .sunken-panel {

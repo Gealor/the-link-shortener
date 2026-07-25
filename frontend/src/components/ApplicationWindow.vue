@@ -60,7 +60,7 @@ const props = defineProps({
     height: Number,
     zIndex: {
         type: Number,
-        default: 100,
+        default: () => Number(getComputedStyle(document.documentElement).getPropertyValue('--z-windows-base')) || 100,
     }
 });
 const emit = defineEmits(['closeWindow', 'focus'])

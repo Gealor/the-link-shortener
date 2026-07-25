@@ -1,15 +1,20 @@
 :root {
-  --bg: #54A9A7;
+  --bg: #008080;
   --text: #000000;
   --radius: 12px;
   --taskbar-height: 36px;
+  --z-windows-base: 100;
+  --z-taskbar: 1500; /* панель задач (и всё, что внутри неё, включая Start Menu) всегда должна быть выше окон */
+  --color-navy: #000080;      /* глубокий синий (боковая панель Start Menu и т.п.) */
+  --color-highlight: #000080; /* акцентный синий для выделения (selection blue) */
+  --font-family-default: "Pixelated MS Sans Serif", "MS Sans Serif", Arial, sans-serif;
 }
+
 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /* font-family: "Pixelated MS Sans Serif", "MS Sans Serif", Arial, sans-serif; */
 }
 
 body {

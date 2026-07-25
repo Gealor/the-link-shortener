@@ -1,8 +1,7 @@
 <template>
-  <TaskBar 
+  <TaskBar
     :open-apps="openWindows"
     :quick-launch-apps="quickLaunchApps"
-    style="z-index: var(--z-start-menu);"
     @launch-app="launchApp"
     @focus-app="focusApp"
   />
