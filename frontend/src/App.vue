@@ -130,10 +130,13 @@ function getZIndex(id) {
 .vertical-separator-white {
     width: 3px;
     height: 80%;
-    background: #dddddd;
-    box-shadow: 1.5px 1.5px 0 #949494; /* классический выпуклый разделитель win98 */
-    border-radius: 0px;
-    margin: 0 2px;
+    background-color: #c0c0c0;
+    border-top: white 1px solid;
+    border-left: white 1px solid;
+    border-right: #808080 1px solid;
+    border-bottom: #808080 1px solid;
+    padding-left: 0;
+    margin: 2px;
 }
 
 .little-icon {
