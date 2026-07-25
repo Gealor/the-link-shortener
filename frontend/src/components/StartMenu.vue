@@ -78,7 +78,7 @@ const items = [
     align-items: flex-end;
     justify-content: center;
     padding: 8px 0;
-    background: linear-gradient(180deg, #000080 70%, #0F7ECD, #000080);
+    background: linear-gradient(180deg, var(--color-navy) 50%, #0F7ECD 80%, var(--color-navy) 100%);
 }
 
 .side-banner-text {
@@ -119,7 +119,7 @@ const items = [
 }
 
 .menu-item:hover {
-    background: #0a246a;
+    background: var(--color-highlight);
     color: #fff;
 }
 
