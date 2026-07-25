@@ -63,7 +63,7 @@ const props = defineProps({
         default: 100,
     }
 });
-const emit = defineEmits(['close', 'focus'])
+const emit = defineEmits(['closeWindow', 'focus'])
 
 // Переменная для ссылки на элемент окна
 const windowEl = ref(null);
@@ -125,7 +125,7 @@ function close() {
     isMinimized.value = false
     isMaximized.value = false
     isOpen.value = false
-    emit('close')
+    emit('closeWindow')
 }
 
 function startDrag(event) {

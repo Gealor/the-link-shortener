@@ -6,7 +6,7 @@
         :main-icon="mainIcon"
         :height="height"
         :width="width"
-        @close="$emit('close')"
+        @close-window="$emit('close')"
     >
         <MyComputerHead :url="windowTitle" :icon="windowIcon" />
 

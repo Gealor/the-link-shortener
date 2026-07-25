@@ -6,7 +6,7 @@
         :main-icon="mainIcon"
         :width="width"
         :height="height"
-        @close="$emit('close')"
+        @close-window="$emit('close')"
     >
         <InternetExplorerHead url="https://Shortify/" :icon="windowIcon" />
 
