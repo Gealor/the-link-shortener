@@ -182,8 +182,18 @@ onUnmounted(() => {
 .quick-launch {
     display: flex;
     align-items: center;
-    gap: 2px;
     margin-right: 20px;
+}
+
+.quick-launch .btn-icon {
+    box-sizing: content-box; /* чтобы padding не сжимал саму картинку*/
+    padding: 4px;
+    margin: 0px; /* компенсируем padding, чтобы соседние иконки не раздвигались */
+    cursor: pointer;
+}
+
+.quick-launch .btn-icon:hover {
+    box-shadow: inset 1px 1px #fff, inset -1px -1px #808080; /* приподнятый бортик, как у остальных win98-элементов */
 }
 
 /* Кнопка задачи */
