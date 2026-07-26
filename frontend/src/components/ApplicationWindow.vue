@@ -75,15 +75,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, useSlots } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 import missingIcon from '../assets/icons/msagent-3.png'
-import ApplicationHead from './ApplicationHead.vue'
 
-// Минимальные размеры окна по умолчанию - отдельно для окон с ApplicationHead
-// занимают fixed-высоту и не сжимаются меньше определённой ширины) и без него
-const MIN_WIDTH_WITH_HEADER = 450
-const MIN_HEIGHT_WITH_HEADER = 220
+// Базовый минимальный размер окна (без учёта шапки) - само окно (title-bar + status-bar + чуть контента)
 const MIN_WIDTH_DEFAULT = 200
 const MIN_HEIGHT_DEFAULT = 120
 
@@ -137,20 +133,42 @@ const isDragging = ref(false);
 // Размер окна
 const size = ref({ width: props.width, height: props.height ?? null })
 
-// используется ли в слоте ApplicationHead,
-// чтобы автоматически подобрать разумный минимальный размер окна под его содержимое
-const slots = useSlots()
-const hasApplicationHead = computed(() => {
-    const nodes = slots.default?.() ?? []
-    return nodes.some(vnode => vnode.type === ApplicationHead)
-})
+// Измеренные (по реальному DOM) размеры шапки - суммарная высота и максимальная
+// требуемая ширина среди всех .bar-header строк, которые сейчас реально отрисованы в слоте
+// (панели, отключённые через v-if, просто не будут рассматриваться)
+const measuredHeaderWidth = ref(0)
+const measuredHeaderHeight = ref(0)
 
 const effectiveMinWidth = computed(() =>
-    props.minWidth ?? (hasApplicationHead.value ? MIN_WIDTH_WITH_HEADER : MIN_WIDTH_DEFAULT)
+    props.minWidth ?? Math.max(MIN_WIDTH_DEFAULT, measuredHeaderWidth.value)
 )
 const effectiveMinHeight = computed(() =>
-    props.minHeight ?? (hasApplicationHead.value ? MIN_HEIGHT_WITH_HEADER : MIN_HEIGHT_DEFAULT)
+    props.minHeight ?? (MIN_HEIGHT_DEFAULT + measuredHeaderHeight.value)
 )
+
+function measureHeader() {
+    if (!windowEl.value) return
+    const rows = windowEl.value.querySelectorAll('.window-body .bar-header')
+
+    let totalHeight = 0
+    let maxWidth = 0
+
+    rows.forEach((row) => {
+        // высота задаётся явно в CSS (.bar-header--menu/actions/search), поэтому просто читаем её
+        totalHeight += row.getBoundingClientRect().height
+
+        // ширина строки сейчас "растянута" под текущую ширину окна (width: calc(100% + 16px)),
+        // поэтому чтобы узнать реально необходимую ширину контента — на мгновение снимаем
+        // ограничение и тут же возвращаем обратно (без промежуточной отрисовки кадра)
+        const prevWidth = row.style.width
+        row.style.width = 'max-content'
+        maxWidth = Math.max(maxWidth, row.scrollWidth)
+        row.style.width = prevWidth
+    })
+
+    measuredHeaderHeight.value = totalHeight
+    measuredHeaderWidth.value = maxWidth
+}
 
 // Переменные для ресайза окна
 const ResizeDirection = Object.freeze({
@@ -356,6 +374,7 @@ onMounted(() => {
         x: (window.innerWidth - rect.width) / 2,
         y: (window.innerHeight - rect.height) / 2,
     }
+    measureHeader()
 });
 
 onUnmounted(() => {
@@ -384,6 +403,7 @@ onUnmounted(() => {
 .window-body {
     flex: 1;
     min-height: 0;
+    margin: 0; /* у 98.css по умолчанию margin: 8px — обнуляем, чтобы шапка/контент шли встык к краям окна */
     display: flex;
     flex-direction: column;
 }

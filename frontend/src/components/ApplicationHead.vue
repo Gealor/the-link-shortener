@@ -1,49 +1,52 @@
 <template>
-    <div class="bar-header bar-header--menu">
-        <!-- Меню -->
-        <div class="separator">
-            <div class="vertical-separator-white"></div>
-        </div>
-        <div
-            v-for="(elem, index) in listTools"
-            class="menuitem"
-            :tabindex="index"
-        >
-            <span class="mnemonic">{{ elem[0] }}</span>{{ elem.slice(1) }}
-        </div>
-    </div>
-
-    <!-- Действия -->
-    <div class="bar-header bar-header--actions">
-        <div class="separator">
-            <div class="vertical-separator-white"></div>
-        </div>
-
-        <template v-for="btn in toolbarButtons" :key="btn.id">
-            <div v-if="btn.divider" class="separator">
-                <div class="vertical-separator-black"></div>
+    <div class="app-head">
+        <div v-if="includeMenu" class="bar-header bar-header--menu">
+            <!-- Меню -->
+            <div class="separator">
+                <div class="vertical-separator-white"></div>
             </div>
-            <div class="toolbar-btn">
-                <img :src="btn.icon" :alt="btn.title" class="toolbar-icon" />
-                <span class="toolbar-label">{{ btn.title }}</span>
+            <div
+                v-for="(elem, index) in listTools"
+                class="menuitem"
+                :tabindex="index"
+            >
+                <span class="mnemonic">{{ elem[0] }}</span>{{ elem.slice(1) }}
             </div>
-        </template>
-    </div>
+        </div>
 
-    <!-- Поиск -->
-    <div class="bar-header bar-header--search">
-        <div class="separator">
-            <div class="vertical-separator-white"></div>
+        <!-- Действия -->
+        <div v-if="includeActions" class="bar-header bar-header--actions">
+            <div class="separator">
+                <div class="vertical-separator-white"></div>
+            </div>
+
+            <template v-for="btn in toolbarButtons" :key="btn.id">
+                <div v-if="btn.divider" class="separator">
+                    <div class="vertical-separator-black"></div>
+                </div>
+                <div class="toolbar-btn">
+                    <img :src="btn.icon" :alt="btn.title" class="toolbar-icon" />
+                    <span class="toolbar-label">{{ btn.title }}</span>
+                </div>
+            </template>
         </div>
-        <div>
-            <span class="mnemonic">A</span>ddress
-        </div>
-        <div class="field-border url-field">
-            <img :src="icon" alt="InternetExplorerIcon" class="little-icon">
-            <span class="url-text">{{ url }}</span>
-            <button class="url-dropdown">▼</button>
+
+        <!-- Поиск -->
+        <div v-if="includeSearch" class="bar-header bar-header--search">
+            <div class="separator">
+                <div class="vertical-separator-white"></div>
+            </div>
+            <div>
+                <span class="mnemonic">A</span>ddress
+            </div>
+            <div class="field-border url-field">
+                <img :src="icon" alt="InternetExplorerIcon" class="little-icon">
+                <span class="url-text">{{ url }}</span>
+                <button class="url-dropdown">▼</button>
+            </div>
         </div>
     </div>
+    
 </template>
 
 <script setup>
@@ -57,7 +60,10 @@ import printIcon from "../assets/icons/printer-1.png"
 
 defineProps({
     url: { type: String, default: '' },
-    icon: { type: String }
+    icon: { type: String },
+    includeMenu: { type: Boolean, default: true },
+    includeActions: { type: Boolean, default: true },
+    includeSearch: { type: Boolean, default: true },
 })
 
 const listTools = ["Edit", "Edit", "View", "Favorites", "Tools", "Help"]
@@ -75,13 +81,17 @@ const toolbarButtons = [
 </script>
 
 <style scoped>
+.app-head {
+    margin-bottom: 4px;
+}
+
 .bar-header {
-    width: calc(100% + 16px);
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 0px;
-    margin: -8px -8px 8px -8px;
+    margin: 0;
     box-sizing: border-box;
     background: silver; /* стандартный win98-фон */
     border-top: 2px solid #fff;
