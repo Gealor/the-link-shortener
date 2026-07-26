@@ -50,6 +50,27 @@
             class="resize-handle resize-handle--top"
             @mousedown="startResize(ResizeDirection.TOP, $event)"
         ></div>
+
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--corner resize-handle--top-left"
+            @mousedown="startResize(ResizeDirection.TOP_LEFT, $event)"
+        ></div>
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--corner resize-handle--top-right"
+            @mousedown="startResize(ResizeDirection.TOP_RIGHT, $event)"
+        ></div>
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--corner resize-handle--bottom-left"
+            @mousedown="startResize(ResizeDirection.BOTTOM_LEFT, $event)"
+        ></div>
+        <div
+            v-if="!isMaximized && !isMinimized"
+            class="resize-handle resize-handle--corner resize-handle--bottom-right"
+            @mousedown="startResize(ResizeDirection.BOTTOM_RIGHT, $event)"
+        ></div>
     </div>
 </template>
 
@@ -137,6 +158,10 @@ const ResizeDirection = Object.freeze({
     LEFT: 'left',
     BOTTOM: 'bottom',
     TOP: 'top',
+    TOP_LEFT: 'top-left',
+    TOP_RIGHT: 'top-right',
+    BOTTOM_LEFT: 'bottom-left',
+    BOTTOM_RIGHT: 'bottom-right',
 })
 const isResizing = ref(false)
 const resizeDirection = ref(null) // одно из значений ResizeDirection
@@ -266,12 +291,37 @@ function resizeTop(event) {
     size.value.height = newHeight
 }
 
-// Регистр, который ставит в соответствие одной стороне некоторый обработчик 
+// Диагональные обработчики - просто комбинируют по одному горизонтальному и одному вертикальному
+function resizeTopLeft(event) {
+    resizeLeft(event)
+    resizeTop(event)
+}
+
+function resizeTopRight(event) {
+    resizeRight(event)
+    resizeTop(event)
+}
+
+function resizeBottomLeft(event) {
+    resizeLeft(event)
+    resizeBottom(event)
+}
+
+function resizeBottomRight(event) {
+    resizeRight(event)
+    resizeBottom(event)
+}
+
+// Регистр, который ставит в соответствие одной стороне некоторый обработчик
 const mapDirectionToHandle = {
     [ResizeDirection.RIGHT]: resizeRight,
     [ResizeDirection.LEFT]: resizeLeft,
     [ResizeDirection.BOTTOM]: resizeBottom,
     [ResizeDirection.TOP]: resizeTop,
+    [ResizeDirection.TOP_LEFT]: resizeTopLeft,
+    [ResizeDirection.TOP_RIGHT]: resizeTopRight,
+    [ResizeDirection.BOTTOM_LEFT]: resizeBottomLeft,
+    [ResizeDirection.BOTTOM_RIGHT]: resizeBottomRight,
 }
 
 function onResize(event) {
@@ -372,5 +422,34 @@ onUnmounted(() => {
     width: 100%;
     height: 6px;
     cursor: ns-resize;
+}
+
+.resize-handle--corner {
+    width: 8px;
+    height: 8px;
+}
+
+.resize-handle--top-left {
+    top: -3px;
+    left: -3px;
+    cursor: nwse-resize;
+}
+
+.resize-handle--top-right {
+    top: -3px;
+    right: -3px;
+    cursor: nesw-resize;
+}
+
+.resize-handle--bottom-left {
+    bottom: -3px;
+    left: -3px;
+    cursor: nesw-resize;
+}
+
+.resize-handle--bottom-right {
+    bottom: -3px;
+    right: -3px;
+    cursor: nwse-resize;
 }
 </style>
