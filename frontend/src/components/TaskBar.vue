@@ -19,6 +19,7 @@
             <div class="vertical-separator-white"></div>
         </div>
 
+        <!-- Быстрый запуск -->
         <div class="quick-launch">
             <img 
                 v-for="app in quickLaunchApps"
@@ -35,6 +36,7 @@
             <div class="vertical-separator-white"></div>
         </div>
 
+        <!-- Открытые приложения -->
         <button 
             v-for="app in openApps"
             :key="app.id"
@@ -49,6 +51,7 @@
             <div class="vertical-separator-black"></div>
         </div>
 
+        <!-- Группа уведомлений -->
         <div class="field-border-disabled notification-area">
             <div class="notification-icons">
                 <img :src="mouseIcon" alt="Mouse" class="notification-area-icon">
