@@ -36,5 +36,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 6. (WIP) Start menu button functional (Start Menu component)
 7. ~~Dynamical resize windows~~
 8. ~~Add functional for close window with right mouse button~~
-9. (TODO) Icons on Desktop
+9. ~~Icons on Desktop~~
 10. (TODO) Add Calculator and Paint
