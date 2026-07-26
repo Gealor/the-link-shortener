@@ -28,13 +28,13 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### What already done?
 
-1. Drag windows on Desktop
-2. Minimize, Maximize, Close window functional
-3. TaskBar functional and scaling add applications
-4. Priority windows with z-index
-5. About Me Application (My Computer)
-6. (TODO) Start menu button functional (Start Menu component)
-7. (TODO) Dynamical resize windows
-8. (TODO) Add functional for close window with right mouse button
-9. (TODO) Icons on Desktop 
+1. ~~Drag windows on Desktop~~
+2. ~~Minimize, Maximize, Close window functional~~
+3. ~~TaskBar functional and scaling add applications~~
+4. ~~Priority windows with z-index~~
+5. ~~About Me Application (My Computer)~~
+6. (WIP) Start menu button functional (Start Menu component)
+7. ~~Dynamical resize windows~~
+8. ~~Add functional for close window with right mouse button~~
+9. (TODO) Icons on Desktop
 10. (TODO) Add Calculator and Paint
