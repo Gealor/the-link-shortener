@@ -155,12 +155,19 @@ onUnmounted(() => {
 
 /* Кнопка задачи */
 .task-button {
-    width: 80px;
     display: flex;
-    min-width: 0;
     align-items: center;
+    margin: 0;
+    padding-left: 3px;
+    min-width: 50px;
+    max-width: 200px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--font-family-title);
+    font-size: var(--font-size-title);
     padding: 2px 6px;
-    white-space: nowrap; /* чтобы текст не переносился при сжатии */
     height: 30px;
 }
 
