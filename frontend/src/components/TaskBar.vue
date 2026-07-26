@@ -37,15 +37,25 @@
         </div>
 
         <!-- Открытые приложения -->
-        <button 
+        <button
             v-for="app in openApps"
             :key="app.id"
             class="default task-button button-active"
             @click="$emit('focus-app', app.id)"
+            @contextmenu.prevent="openTaskContextMenu($event, app.id)"
         >
             <img :src="app.icon" :alt="app.title" class="btn-icon">
             <span class="btn-text">{{ app.title }}</span>
         </button>
+
+        <div ref="taskContextMenuWrapper">
+            <TaskContextMenu
+                :visible="taskContextMenu.visible"
+                :x="taskContextMenu.x"
+                :y="taskContextMenu.y"
+                @close="handleCloseApp"
+            />
+        </div>
 
         <div class="separator push-right">
             <div class="vertical-separator-black"></div>
@@ -69,6 +79,7 @@ import mouseIcon from '../assets/icons/mouse-3.png'
 import loudspeakerIcon from '../assets/icons/loudspeaker_rays-1.png'
 import networkIcon from '../assets/icons/network_normal_two_pcs-1.png'
 import StartMenu from './StartMenu.vue'
+import TaskContextMenu from './TaskContextMenu.vue'
 
 import { ref, onMounted, onUnmounted } from 'vue'
 
@@ -82,7 +93,7 @@ const props = defineProps({
         default: () => [],
     }
 })
-defineEmits(['launch-app', 'focus-app'])
+const emit = defineEmits(['launch-app', 'focus-app', 'close-app'])
 
 
 // Стартовое меню
@@ -96,10 +107,32 @@ function onMenuSelect() {
 }
 
 function onDocumentClick(event) {
-    if (!startMenuOpen.value) return
-    if (startMenuWrapper.value?.contains(event.target)) return // клик внутри меню
-    if (startButtonRef.value?.contains(event.target)) return // клик по кнопке Start — тоггл уже обработан её @click
-    startMenuOpen.value = false
+    if (startMenuOpen.value) {
+        const insideMenu = startMenuWrapper.value?.contains(event.target)
+        const onButton = startButtonRef.value?.contains(event.target)
+        if (!insideMenu && !onButton) startMenuOpen.value = false
+    }
+
+    if (taskContextMenu.value.visible && !taskContextMenuWrapper.value?.contains(event.target)) {
+        closeTaskContextMenu()
+    }
+}
+
+// Контекстное меню открытого приложения (ПКМ по кнопке в панели задач)
+const taskContextMenu = ref({ visible: false, x: 0, y: 0, appId: null })
+const taskContextMenuWrapper = ref(null)
+
+function openTaskContextMenu(event, appId) {
+    taskContextMenu.value = { visible: true, x: event.clientX, y: window.innerHeight - event.clientY, appId }
+}
+
+function closeTaskContextMenu() {
+    taskContextMenu.value.visible = false
+}
+
+function handleCloseApp() {
+    if (taskContextMenu.value.appId) emit('close-app', taskContextMenu.value.appId)
+    closeTaskContextMenu()
 }
 
 // Время

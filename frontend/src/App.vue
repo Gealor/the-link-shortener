@@ -4,6 +4,7 @@
     :quick-launch-apps="quickLaunchApps"
     @launch-app="launchApp"
     @focus-app="focusApp"
+    @close-app="closeApp"
   />
 
   <!-- Компонент для динамического рендеринга, какой компонент отрисовать определяет атрибут :is -->
