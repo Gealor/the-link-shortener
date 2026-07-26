@@ -1,4 +1,6 @@
 <template>
+  <Desktop :apps="desktopApps" @launch-app="launchApp" />
+
   <TaskBar
     :open-apps="openWindows"
     :quick-launch-apps="quickLaunchApps"
@@ -27,9 +29,10 @@
 
 <script setup>
 import TaskBar from './components/TaskBar.vue'
+import Desktop from './components/Desktop.vue'
 
 import { ref } from 'vue'
-import { appsRegistry, quickLaunchApps } from './composables/apps.js'
+import { appsRegistry, quickLaunchApps, desktopApps } from './composables/apps.js'
 
 const openWindows = ref([]) // список открытых окон
 const windowRefs = ref({}) // ссылки на компоненты окон, чтобы можно было вызывать их методы

@@ -14,6 +14,7 @@ export const appsRegistry = {
     windowIcon: htmlIcon,
     component: markRaw(ExplorerApp),
     quickLaunch: true,
+    desktop: true,
     height: 400,
     width: 550,
   },
@@ -25,9 +26,11 @@ export const appsRegistry = {
     windowIcon: computerIcon,
     component: markRaw(TestApp),
     quickLaunch: true,
+    desktop: true,
     height: 400,
     width: 600,
   },
 }
 
 export const quickLaunchApps = Object.values(appsRegistry).filter(a => a.quickLaunch)
+export const desktopApps = Object.values(appsRegistry).filter(a => a.desktop)
