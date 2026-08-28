@@ -18,7 +18,7 @@ services:
       - dev
 
   db:
-    image: postgres
+    image: postgres:17
     env_file:
       - ./backend/src/.env
     ports:
