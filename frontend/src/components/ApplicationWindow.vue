@@ -238,22 +238,22 @@ function close() {
     emit('closeWindow')
 }
 
-function startDrag(event) {
+function startDrag($event) {
     if (isMaximized.value) return
     isDragging.value = true
     dragOffset.value = {
-        x: event.clientX - pos.value.x,
-        y: event.clientY - pos.value.y,
+        x: $event.clientX - pos.value.x,
+        y: $event.clientY - pos.value.y,
     }
     window.addEventListener('mousemove', onDrag)
     window.addEventListener('mouseup', stopDrag)
 }
 
-function onDrag(event) {
+function onDrag($event) {
     if (!isDragging.value) return
     pos.value = {
-        x: event.clientX - dragOffset.value.x,
-        y: event.clientY - dragOffset.value.y,
+        x: $event.clientX - dragOffset.value.x,
+        y: $event.clientY - dragOffset.value.y,
     }
 }
 
@@ -263,14 +263,14 @@ function stopDrag() {
     window.removeEventListener('mouseup', stopDrag)
 }
 
-function startResize(direction, event) {
+function startResize(direction, $event) {
     if (isMaximized.value) return
-    event.preventDefault() // чтобы перенос не выделял текст на странице
+    $event.preventDefault() // чтобы перенос не выделял текст на странице
     isResizing.value = true
     resizeDirection.value = direction
     resizeStart.value = {
-        x: event.clientX,
-        y: event.clientY,
+        x: $event.clientX,
+        y: $event.clientY,
         width: size.value.width,
         height: size.value.height ?? windowEl.value.getBoundingClientRect().height,
         posX: pos.value.x,
@@ -282,52 +282,52 @@ function startResize(direction, event) {
 
 
 // Обработчики стороны
-function resizeRight(event) {
-    const delta = event.clientX - resizeStart.value.x
+function resizeRight($event) {
+    const delta = $event.clientX - resizeStart.value.x
     size.value.width = Math.max(effectiveMinWidth.value, resizeStart.value.width + delta);
 }
 
-function resizeLeft(event) {
+function resizeLeft($event) {
     // Растягиваем влево: правый край должен остаться на месте,
     // поэтому позицию (x) сдвигаем ровно на столько, на сколько реально изменилась ширина
-    const delta = event.clientX - resizeStart.value.x
+    const delta = $event.clientX - resizeStart.value.x
     const newWidth = Math.max(effectiveMinWidth.value, resizeStart.value.width - delta)
     pos.value.x = resizeStart.value.posX + (resizeStart.value.width - newWidth)
     size.value.width = newWidth
 }
 
-function resizeBottom(event) {
-    const delta = event.clientY - resizeStart.value.y
+function resizeBottom($event) {
+    const delta = $event.clientY - resizeStart.value.y
     size.value.height = Math.max(effectiveMinHeight.value, resizeStart.value.height + delta)
 }
 
-function resizeTop(event) {
+function resizeTop($event) {
     // Растягиваем вверх: нижний край должен остаться на месте
-    const delta = event.clientY - resizeStart.value.y
+    const delta = $event.clientY - resizeStart.value.y
     const newHeight = Math.max(effectiveMinHeight.value, resizeStart.value.height - delta)
     pos.value.y = resizeStart.value.posY + (resizeStart.value.height - newHeight)
     size.value.height = newHeight
 }
 
 // Диагональные обработчики - просто комбинируют по одному горизонтальному и одному вертикальному
-function resizeTopLeft(event) {
-    resizeLeft(event)
-    resizeTop(event)
+function resizeTopLeft($event) {
+    resizeLeft($event)
+    resizeTop($event)
 }
 
-function resizeTopRight(event) {
-    resizeRight(event)
-    resizeTop(event)
+function resizeTopRight($event) {
+    resizeRight($event)
+    resizeTop($event)
 }
 
-function resizeBottomLeft(event) {
-    resizeLeft(event)
-    resizeBottom(event)
+function resizeBottomLeft($event) {
+    resizeLeft($event)
+    resizeBottom($event)
 }
 
-function resizeBottomRight(event) {
-    resizeRight(event)
-    resizeBottom(event)
+function resizeBottomRight($event) {
+    resizeRight($event)
+    resizeBottom($event)
 }
 
 // Регистр, который ставит в соответствие одной стороне некоторый обработчик
@@ -342,7 +342,7 @@ const mapDirectionToHandle = {
     [ResizeDirection.BOTTOM_RIGHT]: resizeBottomRight,
 }
 
-function onResize(event) {
+function onResize($event) {
     if (!isResizing.value) return
 
     const handler = mapDirectionToHandle[resizeDirection.value]
@@ -351,7 +351,7 @@ function onResize(event) {
         return
     }
 
-    handler(event)
+    handler($event)
 }
 
 function stopResize() {
