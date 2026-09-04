@@ -32,43 +32,43 @@
 
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--right"
+            class="resize-handle right"
             @mousedown="startResize(ResizeDirection.RIGHT, $event)"
         ></div>
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--left"
+            class="resize-handle left"
             @mousedown="startResize(ResizeDirection.LEFT, $event)"
         ></div>
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--bottom"
+            class="resize-handle bottom"
             @mousedown="startResize(ResizeDirection.BOTTOM, $event)"
         ></div>
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--top"
+            class="resize-handle top"
             @mousedown="startResize(ResizeDirection.TOP, $event)"
         ></div>
 
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--corner resize-handle--top-left"
+            class="resize-handle corner top-left"
             @mousedown="startResize(ResizeDirection.TOP_LEFT, $event)"
         ></div>
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--corner resize-handle--top-right"
+            class="resize-handle corner top-right"
             @mousedown="startResize(ResizeDirection.TOP_RIGHT, $event)"
         ></div>
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--corner resize-handle--bottom-left"
+            class="resize-handle corner bottom-left"
             @mousedown="startResize(ResizeDirection.BOTTOM_LEFT, $event)"
         ></div>
         <div
             v-if="!isMaximized && !isMinimized"
-            class="resize-handle resize-handle--corner resize-handle--bottom-right"
+            class="resize-handle corner bottom-right"
             @mousedown="startResize(ResizeDirection.BOTTOM_RIGHT, $event)"
         ></div>
     </div>
@@ -412,7 +412,7 @@ onUnmounted(() => {
     position: absolute;
 }
 
-.resize-handle--right {
+.resize-handle.right {
     top: 0;
     right: -3px;
     width: 6px;
@@ -420,7 +420,7 @@ onUnmounted(() => {
     cursor: ew-resize;
 }
 
-.resize-handle--bottom {
+.resize-handle.bottom {
     left: 0;
     bottom: -3px;
     width: 100%;
@@ -428,7 +428,7 @@ onUnmounted(() => {
     cursor: ns-resize;
 }
 
-.resize-handle--left {
+.resize-handle.left {
     top: 0;
     left: -3px;
     width: 6px;
@@ -436,7 +436,7 @@ onUnmounted(() => {
     cursor: ew-resize;
 }
 
-.resize-handle--top {
+.resize-handle.top {
     left: 0;
     top: -3px;
     width: 100%;
@@ -444,30 +444,30 @@ onUnmounted(() => {
     cursor: ns-resize;
 }
 
-.resize-handle--corner {
+.resize-handle.corner {
     width: 8px;
     height: 8px;
 }
 
-.resize-handle--top-left {
+.resize-handle.top-left {
     top: -3px;
     left: -3px;
     cursor: nwse-resize;
 }
 
-.resize-handle--top-right {
+.resize-handle.top-right {
     top: -3px;
     right: -3px;
     cursor: nesw-resize;
 }
 
-.resize-handle--bottom-left {
+.resize-handle.bottom-left {
     bottom: -3px;
     left: -3px;
     cursor: nesw-resize;
 }
 
-.resize-handle--bottom-right {
+.resize-handle.bottom-right {
     bottom: -3px;
     right: -3px;
     cursor: nwse-resize;
