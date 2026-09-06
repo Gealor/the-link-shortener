@@ -94,6 +94,7 @@ class Settings(BaseSettings):
     auth: AuthSettings = AuthSettings()
 
     count_repeating: int = 3
+    backoff_factor: int = 2
 
 settings = Settings()
 
