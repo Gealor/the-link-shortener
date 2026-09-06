@@ -6,6 +6,7 @@ from fastapi import HTTPException
 from fastapi import status
 from fastapi.responses import RedirectResponse
 
+from src.core.auth.security import get_current_user
 from src.dependencies.rate_limiter_factory import rate_limiter_factory
 from src.schemas.exceptions import InternalDatabaseException
 from src.schemas.exceptions import OutOfAttemptsForRepeatException
@@ -17,7 +18,13 @@ from src.services.shortener_service import ShortenerService
 
 router = APIRouter()
 
-@router.post("/short-url", dependencies=[Depends(rate_limiter_factory(10, 10))])
+@router.post(
+    "/short-url",
+    dependencies=[
+        Depends(get_current_user),
+        Depends(rate_limiter_factory(10, 10)),
+    ],
+)
 async def make_short_url(
     url: BodyCreateSlug,
     service: Annotated[ShortenerService, Depends(get_shortener_service)],

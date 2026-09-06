@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 from typing import Annotated
+from typing import Literal
 
 from pydantic import BaseModel
 from pydantic import Field
@@ -54,6 +55,18 @@ class RedisSettings(BaseSettings):
     host: Annotated[str, Field(alias="REDIS_HOST")]
     port: Annotated[int, Field(alias="REDIS_PORT")]
 
+class AuthSettings(BaseModel):
+    session_id_cookie_name: str = "session_id"
+    session_id_expire_days: int = 7
+    http_only: bool = True
+    session_cookie_secure: bool = False  # True в проде (HTTPS)
+    samesite: Literal["strict", "lax", "none"] = "lax"
+
+    @property
+    def session_id_expire_minutes(self) -> int:
+        return 24 * 60 * self.session_id_expire_days
+
+
 class RateLimitSettings(BaseModel):
     topic_name: str = "rate_limiter"
     window_size: int = 10
@@ -78,6 +91,7 @@ class Settings(BaseSettings):
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
     redis: RedisSettings = Field(default_factory=RedisSettings)
     rate_limiter: RateLimitSettings = RateLimitSettings()
+    auth: AuthSettings = AuthSettings()
 
     count_repeating: int = 3
 
