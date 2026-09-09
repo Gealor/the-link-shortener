@@ -2,10 +2,14 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi import status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from src.api import main_router
 from src.core.config import settings
+from src.core.logger import log
 from src.lifespan_app import Lifespan
 
 lifespan_manager = Lifespan()
@@ -25,6 +29,20 @@ app = FastAPI(
     description="This is pet-project Link Shortener",
     lifespan=lifespan
 )
+
+# Это middleware (а не exception_handler), чтобы CORSMiddleware, добавленный ниже и потому
+# внешний, успел навесить свои заголовки на ответ с ошибкой.
+@app.middleware("http")
+async def catch_unhandled_exceptions(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception:
+        log.exception("Unhandled error: %s %s", request.method, request.url.path)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Internal server error. Please try again later."},
+        )
+
 
 origins = [
     "http://localhost:5500",
