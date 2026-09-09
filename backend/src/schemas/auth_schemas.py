@@ -10,7 +10,7 @@ class ResponseSchema(BaseModel):
 class UserBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    nickname: str = Field(examples=["Gealor"])
+    nickname: str = Field(examples=["Gealor"], min_length=2)
 
 
 class UserRead(UserBase):
