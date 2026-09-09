@@ -7,6 +7,7 @@ from src.core.auth.passwords import compare_hashed_passwords
 from src.core.auth.passwords import hash_password
 from src.core.config import settings
 from src.core.logger import log
+from src.models.users import User
 from src.repositories.session_repository import SessionTokenRepository
 from src.repositories.user_repository import UserRepository
 from src.schemas.auth_schemas import ResponseSchema
@@ -46,7 +47,7 @@ class AuthService:
 
         return ResponseSchema(msg="Succesful registration. Now you can log in.")
 
-    async def login_user(self, nickname: str, password: str) -> str:
+    async def login_user(self, nickname: str, password: str) -> tuple[str, User]:
         user = await self.user_repo.get_user_by_nickname(nickname=nickname)
         if not user:
             log.error("User by nickname %s not found", nickname)
@@ -67,7 +68,7 @@ class AuthService:
         token, token_hash = create_token()
         await self._save_session_token(user_id=user.id, token_hash=token_hash)
         log.info("Succesful log in in account: %s", nickname)
-        return token
+        return token, user
 
     async def logout_user(self, user_id: int) -> None:
         await self.token_repo.delete_token(user_id)

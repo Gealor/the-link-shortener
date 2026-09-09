@@ -57,9 +57,9 @@ async def login(
     credentials: LoginCredentials,
     response: Response,
     service: Annotated[AuthService, Depends(get_auth_service)],
-) -> ResponseSchema:
+) -> UserRead:
     try:
-        token = await service.login_user(
+        token, user = await service.login_user(
             nickname=credentials.nickname,
             password=credentials.password,
         )
@@ -80,7 +80,7 @@ async def login(
         response=response,
     )
     log.info("User %s logged in", credentials.nickname)
-    return ResponseSchema(msg="Succesful login!")
+    return UserRead.model_validate(user)
 
 
 @router.post("/logout")
