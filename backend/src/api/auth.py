@@ -25,6 +25,14 @@ from src.services.auth_service import AuthService
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
+@router.get("/me")
+async def me(
+    current_user: Annotated[UserRead, Depends(get_current_user)],
+) -> UserRead:
+    """Вернуть текущего пользователя по куке сессии (или 401)."""
+    return current_user
+
+
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(
     user_data: UserRegisterWithRepeatPassword,
