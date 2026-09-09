@@ -82,6 +82,7 @@ import StartMenu from './StartMenu.vue'
 import TaskContextMenu from './TaskContextMenu.vue'
 
 import { ref, onMounted, onUnmounted } from 'vue'
+import { logout } from '../composables/auth.js'
 
 const props = defineProps({
     openApps: {
@@ -101,9 +102,17 @@ const startMenuOpen = ref(false)
 const startMenuWrapper = ref(null)
 const startButtonRef = ref(null)
 
-function onMenuSelect() {
-    // Пока пункты меню захардкожены и без реального действия — просто закрываем меню
+function onMenuSelect(item) {
     startMenuOpen.value = false
+
+    // Большинство пунктов захардкожены без действия — обрабатываем только те, что умеют что-то делать
+    switch (item?.id) {
+        case 'logoff':
+            logout()
+            break
+        default:
+            break
+    }
 }
 
 function onDocumentClick(event) {

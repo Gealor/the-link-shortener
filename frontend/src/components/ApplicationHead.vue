@@ -128,10 +128,6 @@ const toolbarButtons = [
     filter: grayscale(100%);
 }
 
-.mnemonic {
-    text-decoration: underline;
-}
-
 .menuitem {
     cursor: pointer;
     padding: 1px 5px;

@@ -1,38 +1,45 @@
 <template>
-  <Desktop :apps="desktopApps" @launch-app="launchApp" />
+  <!-- при CHECKING (идёт первая проверка /auth/me) не рендерим ничего — не мигаем экранами -->
+  <LoginApp v-if="authState === AuthState.ANONYMOUS || authState === AuthState.EXPIRED" />
 
-  <TaskBar
-    :open-apps="openWindows"
-    :quick-launch-apps="quickLaunchApps"
-    @launch-app="launchApp"
-    @focus-app="focusApp"
-    @close-app="closeApp"
-  />
+  <template v-else-if="authState === AuthState.AUTHENTICATED">
+    <Desktop :apps="desktopApps" @launch-app="launchApp" />
 
-  <!-- Компонент для динамического рендеринга, какой компонент отрисовать определяет атрибут :is -->
-  <component 
-    v-for="app in openWindows"
-    :is="app.component"
-    :key="app.id"
-    :window-title="app.windowTitle"
-    :window-icon="app.windowIcon"
-    :main-icon="app.icon"
-    :main-title="app.title"
-    :width="app.width"
-    :height="app.height"
-    :ref="(el) => setWindowRef(app.id, el)" 
-    :z-index="getZIndex(app.id)" 
-    @close="closeApp(app.id)"
-    @focus="bringToFront(app.id)"
-  />
+    <TaskBar
+      :open-apps="openWindows"
+      :quick-launch-apps="quickLaunchApps"
+      @launch-app="launchApp"
+      @focus-app="focusApp"
+      @close-app="closeApp"
+    />
+
+    <!-- Компонент для динамического рендеринга, какой компонент отрисовать определяет атрибут :is -->
+    <component 
+      v-for="app in openWindows"
+      :is="app.component"
+      :key="app.id"
+      :window-title="app.windowTitle"
+      :window-icon="app.windowIcon"
+      :main-icon="app.icon"
+      :main-title="app.title"
+      :width="app.width"
+      :height="app.height"
+      :ref="(el) => setWindowRef(app.id, el)" 
+      :z-index="getZIndex(app.id)" 
+      @close="closeApp(app.id)"
+      @focus="bringToFront(app.id)"
+    />
+  </template>
 </template>
 
 <script setup>
 import TaskBar from './components/TaskBar.vue'
 import Desktop from './components/Desktop.vue'
+import LoginApp from './components/LoginApp.vue'
 
 import { ref } from 'vue'
 import { appsRegistry, quickLaunchApps, desktopApps } from './composables/apps.js'
+import { AuthState, authState } from './composables/auth.js'
 
 const openWindows = ref([]) // список открытых окон
 const windowRefs = ref({}) // ссылки на компоненты окон, чтобы можно было вызывать их методы
@@ -157,5 +164,9 @@ function getZIndex(id) {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+}
+
+.mnemonic {
+    text-decoration: underline;
 }
 </style>
