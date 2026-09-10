@@ -387,10 +387,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.title-bar {
-    user-select: none;
-}
-
 .window.minimized .window-body { display: none; }
 
 .window.minimized .status-bar { display: none; }

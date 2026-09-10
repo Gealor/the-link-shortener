@@ -98,6 +98,10 @@ function getZIndex(id) {
   max-width: 560px;
 }
 
+.title-bar {
+    user-select: none;
+}
+
 /* Иконка приложения */
 .application-icon {
     width: 14px;
