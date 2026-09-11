@@ -9,6 +9,8 @@ from src.core.config import settings
 
 CSRF_Secure = Annotated[CsrfProtect, Depends()]
 
+CSRF_ERROR_HEADER = "X-CSRF-Error"
+
 @CsrfProtect.load_config
 def get_csrf_config():
   return settings.csrf

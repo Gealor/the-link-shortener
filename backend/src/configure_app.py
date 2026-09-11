@@ -6,6 +6,7 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from fastapi_csrf_protect.exceptions import CsrfProtectError
 
+from src.core.auth.csrf import CSRF_ERROR_HEADER
 from src.core.logger import log
 from src.lifespan_app import Lifespan
 from src.middlewares import configure_cors_middleware
@@ -50,10 +51,16 @@ def configure_app(
             "http://frontend:5500",
         ],
         allow_credentials=True,
+        expose_headers=[CSRF_ERROR_HEADER],
     )
 
     @app.exception_handler(CsrfProtectError)
     def csrf_protect_exception_handler(request: Request, exc: CsrfProtectError):
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
+        log.warning("CSRF validation failed (status_code=%s): %s", exc.status_code, exc.message)
+        return JSONResponse(
+            status_code=status.HTTP_403_FORBIDDEN,
+            content={"detail": "CSRF check failed. Please refresh the page and try again."},
+            headers={CSRF_ERROR_HEADER: "true"},
+        )
 
     return app
