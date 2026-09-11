@@ -9,6 +9,7 @@ dependencies = [
     "asyncpg>=0.30.0",
     "bcrypt>=5.0.0",
     "fastapi>=0.121.3",
+    "fastapi-csrf-protect>=1.0.7",
     "flake8>=7.3.0",
     "psycopg2>=2.9.11",
     "pydantic>=2.12.4",

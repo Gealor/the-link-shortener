@@ -73,6 +73,21 @@ class RateLimitSettings(BaseModel):
     ttl_seconds: int = window_size*2
 
 
+class CsrfSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=(ENV_TEMPLATE, ENV_FILE),
+        case_sensitive=False,
+        extra="ignore", # Игнорировать другие переменные в .env
+    )
+
+    secret_key: Annotated[str, Field(alias="CSRF_SECRET_KEY")]
+    cookie_samesite: Literal["none", "lax", "strict"] = "lax"
+    cookie_secure: bool = False
+    cookie_http_only: bool = True
+    token_location: Literal["body", "header", "both"] = "header"
+    token_key: str = "X-CSRF-Token"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(ENV_TEMPLATE, ENV_FILE),
@@ -88,10 +103,11 @@ class Settings(BaseSettings):
     runtime: RuntimeSettings = RuntimeSettings()
     full_slug: FullSlugURLSettings = FullSlugURLSettings()
     logger: LogSettings = LogSettings()
-    database: DatabaseSettings = Field(default_factory=DatabaseSettings)
-    redis: RedisSettings = Field(default_factory=RedisSettings)
+    database: DatabaseSettings = Field(default_factory=DatabaseSettings)  # type: ignore[arg-type]
+    redis: RedisSettings = Field(default_factory=RedisSettings)  # type: ignore[arg-type]
     rate_limiter: RateLimitSettings = RateLimitSettings()
     auth: AuthSettings = AuthSettings()
+    csrf: CsrfSettings = Field(default_factory=CsrfSettings)  # type: ignore[arg-type]
 
     count_repeating: int = 3
     backoff_factor: int = 2
