@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import { ApiError, apiFetch } from './api.js'
+import { ApiError, apiFetch, setCsrfToken } from './api.js'
 
 // Одно состояние авторизации на всё приложение:
 //   CHECKING      - идёт первая проверка сессии, экраны не показываем
@@ -21,29 +21,40 @@ export const authState = ref(AuthState.CHECKING)
 export const currentUser = ref(null)
 
 
-// Спросить бэкенд, кто мы. Нужно на старте приложения / после перезагрузки страницы,
-// когда токен сессии есть в куке, а состояния в памяти ещё нет.
-// 401 - сессии нет; сетевой сбой на старте трактуем так же (просто покажем логин).
+// Спросить бэкенд, кто мы, и восстановить csrf_token. Нужно на старте приложения /
+// после перезагрузки страницы, когда кука сессии жива, а состояние в памяти уже нет.
+// GET /auth/csrf кэшируется браузером (Cache-Control) на время жизни токена, поэтому
+// повторные вызовы при последующих перезагрузках не бьют по бэку, пока не сменится
+// сессия (сервер выставляет Vary: Cookie).
+// 401 - сессии нет
 export async function fetchSession() {
     try {
-        currentUser.value = await apiFetch('/auth/me')
+        const [user, { csrf_token }] = await Promise.all([
+            apiFetch('/auth/me'),
+            apiFetch('/auth/csrf'),
+        ])
+        currentUser.value = user
+        setCsrfToken(csrf_token)
         authState.value = AuthState.AUTHENTICATED
     } catch (e) {
         currentUser.value = null
+        setCsrfToken(null)
         authState.value = AuthState.ANONYMOUS
         if (!(e instanceof ApiError)) throw e
     }
 }
 
 
-// Вход. При успехе бэкенд ставит HttpOnly-куку session_id и возвращает самого пользователя —
-// отдельный запрос к /auth/me не нужен.
+// Вход. При успехе бэкенд ставит HttpOnly-куку session_id и csrf-куку, и возвращает
+// самого пользователя и csrf_token - отдельный запрос к /auth/me не нужен.
 // Бросает ApiError (401 - неверные данные, 403 - заблокирован, 0 - сервер недоступен).
 export async function login(nickname, password) {
-    currentUser.value = await apiFetch('/auth/login', {
+    const { user, csrf_token } = await apiFetch('/auth/login', {
         method: 'POST',
         body: { nickname: nickname.trim(), password },
     })
+    currentUser.value = user
+    setCsrfToken(csrf_token)
     authState.value = AuthState.AUTHENTICATED
 }
 
@@ -71,6 +82,7 @@ export async function logout() {
         // игнорируем - локально всё равно выходим
     }
     currentUser.value = null
+    setCsrfToken(null)
     authState.value = AuthState.ANONYMOUS
 }
 
@@ -80,6 +92,7 @@ export async function logout() {
 export function handleUnauthorized() {
     if (authState.value !== AuthState.AUTHENTICATED) return
     currentUser.value = null
+    setCsrfToken(null)
     authState.value = AuthState.EXPIRED
 }
 

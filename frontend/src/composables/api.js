@@ -1,5 +1,17 @@
 const API_URL = import.meta.env.VITE_API_URL
 
+// Double-submit CSRF-токен. Живёт только в памяти вкладки (не localStorage) -
+// источник правды - HttpOnly-кука на бэкенде, этот токен - её "расшифрованная"
+// пара для заголовка. Заполняется/чистится через setCsrfToken из auth.js
+// (после login/me и logout соответственно).
+let csrfToken = null
+
+export function setCsrfToken(token) {
+    csrfToken = token
+}
+
+const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS'])
+
 
 // Ошибка обращения к API.
 // status === 0 - запрос не дошёл (сеть/сервер недоступен).
@@ -34,6 +46,10 @@ function messageFromBody(body, status) {
 export async function apiFetch(path, { method = 'GET', body, signal } = {}) {
     const headers = { Accept: 'application/json' }
     const init = { method, headers, credentials: 'include', signal }
+
+    if (csrfToken && !SAFE_METHODS.has(method.toUpperCase())) {
+        headers['X-CSRF-Token'] = csrfToken
+    }
 
     if (body !== undefined) {
         headers['Content-Type'] = 'application/json'
