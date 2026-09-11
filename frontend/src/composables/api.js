@@ -47,9 +47,9 @@ function messageFromBody(body, status) {
 
 // Бросает ApiError на любой не-2xx ответ и на сетевой сбой.
 // Возвращает распарсенный JSON (или null для пустого тела).
-export async function apiFetch(path, { method = 'GET', body, signal } = {}) {
+export async function apiFetch(path, { method = 'GET', body } = {}) {
     const headers = { Accept: 'application/json' }
-    const init = { method, headers, credentials: 'include', signal }
+    const init = { method, headers, credentials: 'include'}
 
     if (csrfToken && !SAFE_METHODS.has(method.toUpperCase())) {
         headers['X-CSRF-Token'] = csrfToken
