@@ -66,6 +66,10 @@ class AuthSettings(BaseModel):
     def session_id_expire_minutes(self) -> int:
         return 24 * 60 * self.session_id_expire_days
 
+    @property
+    def session_id_expire_seconds(self) -> int:
+        return self.session_id_expire_minutes * 60
+
 
 class RateLimitSettings(BaseModel):
     topic_name: str = "rate_limiter"
@@ -83,9 +87,12 @@ class CsrfSettings(BaseSettings):
     secret_key: Annotated[str, Field(alias="CSRF_SECRET_KEY")]
     cookie_samesite: Literal["none", "lax", "strict"] = "lax"
     cookie_secure: bool = False
-    cookie_http_only: bool = True
+    httponly: bool = True
     token_location: Literal["body", "header", "both"] = "header"
     token_key: str = "X-CSRF-Token"
+    # CSRF-кука не должна протухать раньше сессии (токен стабилен на всю сессию,
+    # а не ротируется на каждый запрос) — иначе живой session_id, но 403 на CSRF.
+    max_age: int = Field(default_factory=lambda: AuthSettings().session_id_expire_seconds)
 
 
 class Settings(BaseSettings):

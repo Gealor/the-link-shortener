@@ -29,3 +29,12 @@ class UserRegisterWithRepeatPassword(UserRegister):
 class LoginCredentials(BaseModel):
     nickname: str = Field(examples=["Gealor"])
     password: str = Field(examples=["ivan_craft7869"])
+
+
+class SessionResponse(BaseModel):
+    user: UserRead
+    csrf_token: str
+
+
+class CsrfTokenResponse(BaseModel):
+    csrf_token: str

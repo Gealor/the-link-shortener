@@ -9,6 +9,7 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse
 
+from src.core.auth.csrf import verify_csrf
 from src.core.auth.security import get_current_user
 from src.dependencies.rate_limiter_factory import rate_limiter_factory
 from src.schemas.exceptions import InternalDatabaseException
@@ -18,7 +19,6 @@ from src.schemas.pydantic_schemas import BodyCreateSlug
 from src.schemas.pydantic_schemas import URLShort
 from src.services import get_shortener_service
 from src.services.shortener_service import ShortenerService
-from src.utils.decorators import csrf_protect_decorator
 
 router = APIRouter()
 
@@ -27,9 +27,9 @@ router = APIRouter()
     dependencies=[
         Depends(get_current_user),
         Depends(rate_limiter_factory(10, 10)),
+        Depends(verify_csrf),
     ],
 )
-@csrf_protect_decorator
 async def make_short_url(
     url: BodyCreateSlug,
     service: Annotated[ShortenerService, Depends(get_shortener_service)],

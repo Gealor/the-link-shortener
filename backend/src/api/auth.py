@@ -6,13 +6,19 @@ from fastapi import HTTPException
 from fastapi import Response
 from fastapi import status
 
+from src.core.auth.csrf import CSRF_Secure
+from src.core.auth.csrf import issue_csrf_token
+from src.core.auth.csrf import set_csrf_cache_headers
+from src.core.auth.csrf import verify_csrf
 from src.core.auth.security import get_current_user
 from src.core.config import settings
 from src.core.cookies import clear_session_cookie
 from src.core.cookies import set_session_cookie
 from src.core.logger import log
+from src.schemas.auth_schemas import CsrfTokenResponse
 from src.schemas.auth_schemas import LoginCredentials
 from src.schemas.auth_schemas import ResponseSchema
+from src.schemas.auth_schemas import SessionResponse
 from src.schemas.auth_schemas import UserRead
 from src.schemas.auth_schemas import UserRegisterWithRepeatPassword
 from src.schemas.exceptions import NicknameAlreadyExistsException
@@ -31,6 +37,16 @@ async def me(
 ) -> UserRead:
     """Вернуть текущего пользователя по куке сессии (или 401)."""
     return current_user
+
+
+@router.get("/csrf", dependencies=[Depends(get_current_user)])
+async def get_csrf_token(
+    response: Response,
+    csrf_protect: CSRF_Secure,
+) -> CsrfTokenResponse:
+    csrf_token = issue_csrf_token(csrf_protect, response)
+    # set_csrf_cache_headers(response)
+    return CsrfTokenResponse(csrf_token=csrf_token)
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
@@ -56,8 +72,9 @@ async def register(
 async def login(
     credentials: LoginCredentials,
     response: Response,
+    csrf_protect: CSRF_Secure,
     service: Annotated[AuthService, Depends(get_auth_service)],
-) -> UserRead:
+) -> SessionResponse:
     try:
         token, user = await service.login_user(
             nickname=credentials.nickname,
@@ -79,13 +96,15 @@ async def login(
         value=token,
         response=response,
     )
+    csrf_token = issue_csrf_token(csrf_protect, response)
     log.info("User %s logged in", credentials.nickname)
-    return UserRead.model_validate(user)
+    return SessionResponse(user=UserRead.model_validate(user), csrf_token=csrf_token)
 
 
-@router.post("/logout")
+@router.post("/logout", dependencies=[Depends(verify_csrf)])
 async def logout(
     response: Response,
+    csrf_protect: CSRF_Secure,
     current_user: Annotated[UserRead, Depends(get_current_user)],
     service: Annotated[AuthService, Depends(get_auth_service)],
 ) -> ResponseSchema:
@@ -94,4 +113,5 @@ async def logout(
         key=settings.auth.session_id_cookie_name,
         response=response,
     )
+    csrf_protect.unset_csrf_cookie(response=response)
     return ResponseSchema(msg="Successfully logged out.")

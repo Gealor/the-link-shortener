@@ -6,10 +6,6 @@ from typing import Callable
 from typing import ParamSpec
 from typing import TypeVar
 
-from fastapi import Request
-from fastapi import Response
-
-from src.core.auth.csrf import CSRF_Secure
 from src.core.config import settings
 from src.core.logger import log
 from src.schemas.exceptions import OutOfAttemptsForRepeatException
@@ -36,18 +32,3 @@ def repeat_decorator(count: int = settings.count_repeating):
             raise OutOfAttemptsForRepeatException from last_exc
         return wrapper
     return decorator
-
-
-def csrf_protect_decorator(func: Callable[P, Awaitable[R]]):
-    @wraps(func)
-    async def wrapper(
-        request: Request,
-        csrf_protect: CSRF_Secure,
-        *args: P.args,
-        **kwargs: P.kwargs,
-    ) -> R:
-        await csrf_protect.validate_csrf(request=request)
-        result = await func(*args, **kwargs)
-        return result
-
-    return wrapper
