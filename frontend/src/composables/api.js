@@ -16,11 +16,15 @@ const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS'])
 // Ошибка обращения к API.
 // status === 0 - запрос не дошёл (сеть/сервер недоступен).
 // message - текст для показа пользователю.
+// isCsrfError - true, если 403 конкретно из-за CSRF-проверки (сервер шлёт заголовок
+// X-CSRF-Error) - отличает от других 403 (например, "аккаунт заблокирован" на /auth/login),
+// чтобы не парсить текст detail на фронте.
 export class ApiError extends Error {
-    constructor(status, message) {
+    constructor(status, message, isCsrfError = false) {
         super(message)
         this.name = 'ApiError'
         this.status = status
+        this.isCsrfError = isCsrfError
     }
 }
 
@@ -67,7 +71,7 @@ export async function apiFetch(path, { method = 'GET', body, signal } = {}) {
     const payload = res.status === 204 ? null : await res.json().catch(() => null)
 
     if (!res.ok) {
-        throw new ApiError(res.status, messageFromBody(payload, res.status))
+        throw new ApiError(res.status, messageFromBody(payload, res.status), res.headers.has('X-CSRF-Error'))
     }
 
     return payload

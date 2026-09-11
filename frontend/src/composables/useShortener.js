@@ -27,12 +27,16 @@ export function useShortener() {
         body: { full_url: u },
       })
     } catch (e) {
+      if (!e instanceof ApiError) throw e
       // сессия оборвана сервером — выходим на экран логина, инлайн-ошибку не показываем
-      if (e instanceof ApiError && e.status === 401) {
+      if (e.status === 401) {
         handleUnauthorized()
         return
       }
-      error.value = e.message
+      if (e.isCsrfError) {
+        error.value = 'Please refresh the page and try again.'
+      }
+      else error.value = e.message
     } finally {
       loading.value = false
     }
