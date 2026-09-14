@@ -1,5 +1,5 @@
 <template>
-  <!-- при CHECKING (идёт первая проверка /auth/me) не рендерим ничего — не мигаем экранами -->
+  <!-- при CHECKING (идёт первая проверка /auth/me) не рендерим ничего - не мигаем экранами -->
   <LoginApp v-if="authState === AuthState.ANONYMOUS || authState === AuthState.EXPIRED" />
 
   <template v-else-if="authState === AuthState.AUTHENTICATED">
@@ -81,7 +81,7 @@ function bringToFront(id) {
 // чтобы не дублировать число ещё и в JS
 const windowsBaseZIndex = Number(
     getComputedStyle(document.documentElement).getPropertyValue('--z-windows-base')
-) || 100
+)
 
 // z-index - это свойство CSS, которое определяет порядок наложения элементов на странице.
 // Элементы с более высоким z-index будут отображаться поверх элементов с более низким z-index.
