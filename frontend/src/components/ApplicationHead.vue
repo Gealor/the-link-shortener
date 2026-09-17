@@ -103,6 +103,7 @@ const toolbarButtons = [
     border-bottom: 2px solid #5c5c5c;
 }
 
+/* один уровень вложенности потомков */
 .bar-header > * {
     /* не даём элементам сжиматься - иначе вместо скролла контент будет мяться */
     flex-shrink: 0;
