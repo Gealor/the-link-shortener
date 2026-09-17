@@ -6,6 +6,8 @@
         :main-icon="mainIcon"
         :height="height"
         :width="width"
+        :min-width="minWidth"
+        :min-height="minHeight"
         @close-window="$emit('close')"
     >
         <MyComputerHead :url="windowTitle" :icon="windowIcon" />
@@ -62,7 +64,9 @@ const props = defineProps({
     windowTitle: String,
     mainIcon: String,
     width: Number,
-    height: Number
+    height: Number,
+    minWidth: Number,
+    minHeight: Number,
 })
 defineEmits(['close'])
 

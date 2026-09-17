@@ -24,6 +24,8 @@
       :main-title="app.title"
       :width="app.width"
       :height="app.height"
+      :min-width="app.minWidth"
+      :min-height="app.minHeight"
       :ref="(el) => setWindowRef(app.id, el)" 
       :z-index="getZIndex(app.id)" 
       @close="closeApp(app.id)"

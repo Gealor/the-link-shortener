@@ -6,6 +6,8 @@
         :main-icon="mainIcon"
         :width="width"
         :height="height"
+        :min-width="minWidth"
+        :min-height="minHeight"
         @close-window="$emit('close')"
     >
         <InternetExplorerHead url="https://Shortify/" :icon="windowIcon" />
@@ -54,7 +56,9 @@ const props = defineProps({
     windowTitle: String,
     mainIcon: String,
     width: Number,
-    height: Number
+    height: Number,
+    minWidth: Number,
+    minHeight: Number,
 })
 
 const windowRef = ref(null) // ссылка на компонент ApplicationWindow
