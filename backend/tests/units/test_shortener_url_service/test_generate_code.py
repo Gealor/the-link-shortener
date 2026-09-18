@@ -1,9 +1,12 @@
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
+from unittest.mock import MagicMock
 
 import pytest
 
 from src.models.short_urls import ShortURL
-from src.schemas.exceptions import OutOfAttemptsForRepeatException, SlugAlreadyExistsException, URLBySlugDontExistException
+from src.schemas.exceptions import OutOfAttemptsForRepeatException
+from src.schemas.exceptions import SlugAlreadyExistsException
+from src.schemas.exceptions import URLBySlugDontExistException
 from src.services.shortener_service import ShortenerService
 
 TEST_SLUG = "aaa"

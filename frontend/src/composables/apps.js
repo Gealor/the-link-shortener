@@ -17,6 +17,8 @@ export const appsRegistry = {
     desktop: true,
     height: 400,
     width: 550,
+    minHeight: 300,
+    minWidth: 400,
   },
   myComputer: {
     id: 'myComputer',
@@ -29,6 +31,8 @@ export const appsRegistry = {
     desktop: true,
     height: 400,
     width: 600,
+    minHeight: 300,
+    minWidth: 480,
   },
 }
 

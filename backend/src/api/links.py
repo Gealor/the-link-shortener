@@ -1,11 +1,16 @@
 from typing import Annotated
+from typing import Literal
 
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
+from fastapi import Query
 from fastapi import status
+from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse
 
+from src.core.auth.csrf import verify_csrf
+from src.core.auth.security import get_current_user
 from src.dependencies.rate_limiter_factory import rate_limiter_factory
 from src.schemas.exceptions import InternalDatabaseException
 from src.schemas.exceptions import OutOfAttemptsForRepeatException
@@ -17,7 +22,14 @@ from src.services.shortener_service import ShortenerService
 
 router = APIRouter()
 
-@router.post("/short-url", dependencies=[Depends(rate_limiter_factory(10, 10))])
+@router.post(
+    "/short-url",
+    dependencies=[
+        Depends(get_current_user),
+        Depends(rate_limiter_factory(10, 10)),
+        Depends(verify_csrf),
+    ],
+)
 async def make_short_url(
     url: BodyCreateSlug,
     service: Annotated[ShortenerService, Depends(get_shortener_service)],
@@ -48,6 +60,7 @@ async def make_short_url(
             detail="Error during format url. Please try again."
         ) from exc
 
+# TODO: добавить кеширование результата в браузере пользователя, т.к. в большинстве своем slug не меняется у ссылки (время жизни предварительно 1 неделя)
 @router.get("/{code}")
 async def redirect(
     code: str,
@@ -74,3 +87,5 @@ async def redirect(
         status_code=status.HTTP_302_FOUND,
     ) # для редиректов используются коды ответов 301 либо 302,
 # разница в том, что при 301 браузер автоматически кеширует ссылку и при переходе на нее повторно уже не будет делаться запрос на бэкенд (не всегда, это зависит от заголовков кэширования)
+
+

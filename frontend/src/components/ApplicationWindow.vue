@@ -1,6 +1,5 @@
 <template>
     <div 
-        v-if="isOpen"
         ref="windowEl"
         class="window" 
         :class="{ minimized: isMinimized }"
@@ -133,42 +132,8 @@ const isDragging = ref(false);
 // Размер окна
 const size = ref({ width: props.width, height: props.height ?? null })
 
-// Измеренные (по реальному DOM) размеры шапки - суммарная высота и максимальная
-// требуемая ширина среди всех .bar-header строк, которые сейчас реально отрисованы в слоте
-// (панели, отключённые через v-if, просто не будут рассматриваться)
-const measuredHeaderWidth = ref(0)
-const measuredHeaderHeight = ref(0)
-
-const effectiveMinWidth = computed(() =>
-    props.minWidth ?? Math.max(MIN_WIDTH_DEFAULT, measuredHeaderWidth.value)
-)
-const effectiveMinHeight = computed(() =>
-    props.minHeight ?? (MIN_HEIGHT_DEFAULT + measuredHeaderHeight.value)
-)
-
-function measureHeader() {
-    if (!windowEl.value) return
-    const rows = windowEl.value.querySelectorAll('.window-body .bar-header')
-
-    let totalHeight = 0
-    let maxWidth = 0
-
-    rows.forEach((row) => {
-        // высота задаётся явно в CSS (.bar-header--menu/actions/search), поэтому просто читаем её
-        totalHeight += row.getBoundingClientRect().height
-
-        // ширина строки сейчас "растянута" под текущую ширину окна (width: calc(100% + 16px)),
-        // поэтому чтобы узнать реально необходимую ширину контента — на мгновение снимаем
-        // ограничение и тут же возвращаем обратно (без промежуточной отрисовки кадра)
-        const prevWidth = row.style.width
-        row.style.width = 'max-content'
-        maxWidth = Math.max(maxWidth, row.scrollWidth)
-        row.style.width = prevWidth
-    })
-
-    measuredHeaderHeight.value = totalHeight
-    measuredHeaderWidth.value = maxWidth
-}
+const effectiveMinWidth = computed(() => props.minWidth ?? MIN_WIDTH_DEFAULT)
+const effectiveMinHeight = computed(() => props.minHeight ?? MIN_HEIGHT_DEFAULT)
 
 // Переменные для ресайза окна
 const ResizeDirection = Object.freeze({
@@ -186,7 +151,6 @@ const resizeDirection = ref(null) // одно из значений ResizeDirect
 const resizeStart = ref({ x: 0, y: 0, width: 0, height: 0, posX: 0, posY: 0 })
 
 // Состояние окна
-const isOpen = ref(true)
 const isMinimized = ref(false)
 const isMaximized = ref(false)
 
@@ -208,6 +172,8 @@ const windowStyle = computed(() => {
         top: pos.value.y + 'px',
         position: 'fixed',
         width: size.value.width + 'px',
+        minWidth: effectiveMinWidth.value + 'px',
+        minHeight: effectiveMinHeight.value + 'px',
         zIndex: props.zIndex, // z-index - это свойство CSS, которое определяет порядок наложения элементов на странице.
         // Элементы с более высоким z-index будут отображаться поверх элементов с более низким z-index.
     }
@@ -234,7 +200,6 @@ function close() {
     size.value = { width: props.width, height: props.height ?? null }
     isMinimized.value = false
     isMaximized.value = false
-    isOpen.value = false
     emit('closeWindow')
 }
 
@@ -362,7 +327,6 @@ function stopResize() {
 }
 
 function open() {
-    isOpen.value = true;
     isMinimized.value = false;
 }
 
@@ -374,7 +338,6 @@ onMounted(() => {
         x: (window.innerWidth - rect.width) / 2,
         y: (window.innerHeight - rect.height) / 2,
     }
-    measureHeader()
 });
 
 onUnmounted(() => {
@@ -387,10 +350,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.title-bar {
-    user-select: none;
-}
-
 .window.minimized .window-body { display: none; }
 
 .window.minimized .status-bar { display: none; }
@@ -406,6 +365,9 @@ onUnmounted(() => {
     margin: 0; /* у 98.css по умолчанию margin: 8px — обнуляем, чтобы шапка/контент шли встык к краям окна */
     display: flex;
     flex-direction: column;
+    /* если контенту (например, строкам шапки) не хватает ширины окна - скроллим всё окно целиком,
+    а не прячем/мнём содержимое отдельных блоков */
+    overflow-x: auto;
 }
 
 .resize-handle {

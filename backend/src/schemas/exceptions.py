@@ -19,3 +19,31 @@ class SlugAlreadyExistsException(BaseShortnererUrlException):
 
 class URLBySlugDontExistException(BaseShortnererUrlException):
     pass
+
+
+class AuthException(Exception):
+    pass
+
+
+class UserNotFoundException(AuthException):
+    pass
+
+
+class NicknameAlreadyExistsException(AuthException):
+    pass
+
+
+class PasswordsNotMatchException(AuthException):
+    pass
+
+
+class UserNotActiveException(AuthException):
+    pass
+
+
+class SessionTokenNotFoundException(AuthException):
+    pass
+
+
+class AuthDatabaseException(AuthException):
+    pass

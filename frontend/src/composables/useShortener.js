@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
-const API_URL = import.meta.env.VITE_API_URL
+import { ApiError, apiFetch } from './api.js'
+import { handleUnauthorized } from './auth.js'
 
 function validateUrl(u) {
   try { new URL(u); return true } catch { return false }
@@ -21,18 +22,21 @@ export function useShortener() {
 
     loading.value = true
     try {
-      const res = await fetch(`${API_URL}/short-url`, {
+      result.value = await apiFetch('/short-url', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ full_url: u })
+        body: { full_url: u },
       })
-      if (!res.ok) {
-        const e = await res.json()
-        throw new Error(e.detail || 'Ошибка сервера')
-      }
-      result.value = await res.json()
     } catch (e) {
-      error.value = e.message
+      if (!e instanceof ApiError) throw e
+      // сессия оборвана сервером — выходим на экран логина, инлайн-ошибку не показываем
+      if (e.status === 401) {
+        handleUnauthorized()
+        return
+      }
+      if (e.isCsrfError) {
+        error.value = 'Please refresh the page and try again.'
+      }
+      else error.value = e.message
     } finally {
       loading.value = false
     }

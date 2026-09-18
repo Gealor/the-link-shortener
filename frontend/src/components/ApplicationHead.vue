@@ -1,6 +1,6 @@
 <template>
     <div class="app-head">
-        <div v-if="includeMenu" class="bar-header bar-header--menu">
+        <div v-if="includeMenu" class="bar-header menu">
             <!-- Меню -->
             <div class="separator">
                 <div class="vertical-separator-white"></div>
@@ -15,7 +15,7 @@
         </div>
 
         <!-- Действия -->
-        <div v-if="includeActions" class="bar-header bar-header--actions">
+        <div v-if="includeActions" class="bar-header actions">
             <div class="separator">
                 <div class="vertical-separator-white"></div>
             </div>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Поиск -->
-        <div v-if="includeSearch" class="bar-header bar-header--search">
+        <div v-if="includeSearch" class="bar-header search">
             <div class="separator">
                 <div class="vertical-separator-white"></div>
             </div>
@@ -86,7 +86,10 @@ const toolbarButtons = [
 }
 
 .bar-header {
-    width: 100%;
+    /* не жёстко 100% контейнера - если содержимому нужно больше места, строка растягивается,
+    а прокрутка при этом обеспечивается на уровне всего окна (см. .window-body) */
+    width: max-content;
+    min-width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -100,12 +103,18 @@ const toolbarButtons = [
     border-bottom: 2px solid #5c5c5c;
 }
 
-.bar-header--menu,
-.bar-header--search {
+/* один уровень вложенности потомков */
+.bar-header > * {
+    /* не даём элементам сжиматься - иначе вместо скролла контент будет мяться */
+    flex-shrink: 0;
+}
+
+.bar-header.menu,
+.bar-header.search {
     height: 30px;
 }
 
-.bar-header--actions {
+.bar-header.actions {
     height: 45px;
 }
 
@@ -128,10 +137,6 @@ const toolbarButtons = [
     filter: grayscale(100%);
 }
 
-.mnemonic {
-    text-decoration: underline;
-}
-
 .menuitem {
     cursor: pointer;
     padding: 1px 5px;
@@ -150,7 +155,8 @@ const toolbarButtons = [
     align-items: center;
     padding-left: 4px;
     height: 95%;
-    width: 100%;
+    flex: 1;
+    min-width: 150px;
 }
 
 .url-text {

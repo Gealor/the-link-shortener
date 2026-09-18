@@ -28,7 +28,7 @@ import documentsIcon from '../assets/icons/directory_open_file_mydocs-1.png'
 import settingsIcon from '../assets/icons/settings_gear-0.png'
 import findIcon from '../assets/icons/magnifying_glass-0.png'
 import helpIcon from '../assets/icons/help_book_small-0.png'
-import logoffIcon from '../assets/icons/key_win-1.png'
+import logoffIcon from '../assets/icons/key_win-0.png'
 import shutdownIcon from '../assets/icons/shut_down_normal-0.png'
 
 defineProps({
