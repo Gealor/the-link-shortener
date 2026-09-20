@@ -173,13 +173,15 @@ const windowStyle = computed(() => {
         position: 'fixed',
         width: size.value.width + 'px',
         minWidth: effectiveMinWidth.value + 'px',
-        minHeight: effectiveMinHeight.value + 'px',
         zIndex: props.zIndex, // z-index - это свойство CSS, которое определяет порядок наложения элементов на странице.
         // Элементы с более высоким z-index будут отображаться поверх элементов с более низким z-index.
     }
 
-    if (!isMinimized.value && size.value.height) {
-        style.height = size.value.height + 'px'
+    if (!isMinimized.value) {
+        style.minHeight = effectiveMinHeight.value + 'px'
+        if (size.value.height) {
+            style.height = size.value.height + 'px'
+        }
     }
 
     return style;
