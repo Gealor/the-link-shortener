@@ -1,48 +1,54 @@
 <template>
     <div class="app-head">
-        <div v-if="includeMenu" class="bar-header menu">
-            <!-- Меню -->
-            <div class="separator">
-                <div class="vertical-separator-white"></div>
-            </div>
-            <div
-                v-for="(elem, index) in listTools"
-                class="menuitem"
-                :tabindex="index"
-            >
-                <span class="mnemonic">{{ elem[0] }}</span>{{ elem.slice(1) }}
+        <div v-if="includeMenu" class="bar-header-row">
+            <div class="bar-header menu">
+                <!-- Меню -->
+                <div class="separator">
+                    <div class="vertical-separator-white"></div>
+                </div>
+                <div
+                    v-for="(elem, index) in listTools"
+                    class="menuitem"
+                    :tabindex="index"
+                >
+                    <span class="mnemonic">{{ elem[0] }}</span>{{ elem.slice(1) }}
+                </div>
             </div>
         </div>
 
         <!-- Действия -->
-        <div v-if="includeActions" class="bar-header actions">
-            <div class="separator">
-                <div class="vertical-separator-white"></div>
-            </div>
+        <div v-if="includeActions" class="bar-header-row">
+            <div class="bar-header actions">
+                <div class="separator">
+                    <div class="vertical-separator-white"></div>
+                </div>
 
-            <template v-for="btn in toolbarButtons" :key="btn.id">
-                <div v-if="btn.divider" class="separator">
-                    <div class="vertical-separator-black"></div>
-                </div>
-                <div class="toolbar-btn">
-                    <img :src="btn.icon" :alt="btn.title" class="toolbar-icon" />
-                    <span class="toolbar-label">{{ btn.title }}</span>
-                </div>
-            </template>
+                <template v-for="btn in toolbarButtons" :key="btn.id">
+                    <div v-if="btn.divider" class="separator">
+                        <div class="vertical-separator-black"></div>
+                    </div>
+                    <div class="toolbar-btn">
+                        <img :src="btn.icon" :alt="btn.title" class="toolbar-icon" />
+                        <span class="toolbar-label">{{ btn.title }}</span>
+                    </div>
+                </template>
+            </div>
         </div>
 
         <!-- Поиск -->
-        <div v-if="includeSearch" class="bar-header search">
-            <div class="separator">
-                <div class="vertical-separator-white"></div>
-            </div>
-            <div>
-                <span class="mnemonic">A</span>ddress
-            </div>
-            <div class="field-border url-field">
-                <img :src="icon" alt="InternetExplorerIcon" class="little-icon">
-                <span class="url-text">{{ url }}</span>
-                <button class="url-dropdown">▼</button>
+        <div v-if="includeSearch" class="bar-header-row">
+            <div class="bar-header search">
+                <div class="separator">
+                    <div class="vertical-separator-white"></div>
+                </div>
+                <div>
+                    <span class="mnemonic">A</span>ddress
+                </div>
+                <div class="field-border url-field">
+                    <img :src="icon" alt="InternetExplorerIcon" class="little-icon">
+                    <span class="url-text">{{ url }}</span>
+                    <button class="url-dropdown">▼</button>
+                </div>
             </div>
         </div>
     </div>
@@ -83,13 +89,15 @@ const toolbarButtons = [
 <style scoped>
 .app-head {
     margin-bottom: 4px;
+    display: table;
+    width: 100%;
+}
+
+.bar-header-row {
+    display: table-row;
 }
 
 .bar-header {
-    /* не жёстко 100% контейнера - если содержимому нужно больше места, строка растягивается,
-    а прокрутка при этом обеспечивается на уровне всего окна (см. .window-body) */
-    width: max-content;
-    min-width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
