@@ -77,6 +77,7 @@ defineEmits(['update:modelValue', 'submit'])
   height: 16px;
 }
 
+/* адаптация стилей для экранов, где ширина <=500 пикселей */
 @media (max-width: 500px) {
   .input-row { flex-direction: column; align-items: stretch; }
   .btn-shorten { width: 100%; }
