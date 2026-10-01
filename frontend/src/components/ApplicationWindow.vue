@@ -381,7 +381,7 @@ onUnmounted(() => {
     right: -3px;
     width: 6px;
     height: 100%;
-    cursor: ew-resize;
+    cursor: ew-resize; /* двунаправленная стрелка влево-вправо */
 }
 
 .resize-handle.bottom {
@@ -389,7 +389,7 @@ onUnmounted(() => {
     bottom: -3px;
     width: 100%;
     height: 6px;
-    cursor: ns-resize;
+    cursor: ns-resize; /* двунаправленная стрелка вверх-вниз */
 }
 
 .resize-handle.left {
@@ -397,7 +397,7 @@ onUnmounted(() => {
     left: -3px;
     width: 6px;
     height: 100%;
-    cursor: ew-resize;
+    cursor: ew-resize; 
 }
 
 .resize-handle.top {
