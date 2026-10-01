@@ -163,7 +163,7 @@ const toolbarButtons = [
     align-items: center;
     padding-left: 4px;
     height: 95%;
-    flex: 1;
+    flex: 1; /* задает совокупность стилей flex-shrink(сжатие) и flex-grow(растягивание), а также flex-basis*/
     min-width: 150px;
 }
 
