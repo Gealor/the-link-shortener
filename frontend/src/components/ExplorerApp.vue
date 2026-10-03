@@ -70,10 +70,6 @@ defineExpose({ // пробрасываемые методы, чтобы роди
 </script>
 
 <style scoped>
-.title-bar {
-    user-select: none;
-}
-
 .sunken-panel {
     padding: 10px;
     background-image: url('@/assets/background-2.jpg');

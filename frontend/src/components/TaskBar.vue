@@ -40,7 +40,7 @@
         <button
             v-for="app in openApps"
             :key="app.id"
-            class="default task-button button-active"
+            class="task-button button-active"
             @click="$emit('focus-app', app.id)"
             @contextmenu.prevent="openTaskContextMenu($event, app.id)"
         >
@@ -182,7 +182,6 @@ onUnmounted(() => {
     align-items: center;
     gap: 4px;
     padding: 2px 4px;
-    box-sizing: border-box;
     background: silver; /* стандартный win98-фон */
     border-top: 1px solid #fff;
 }
@@ -197,7 +196,7 @@ onUnmounted(() => {
 .quick-launch .btn-icon {
     box-sizing: content-box; /* чтобы padding не сжимал саму картинку*/
     padding: 4px;
-    margin: 0px; /* компенсируем padding, чтобы соседние иконки не раздвигались */
+    margin: 0; /* перебиваем margin-right из общего .btn-icon (App.vue), чтобы иконки шли вплотную */
     cursor: pointer;
 }
 
@@ -209,16 +208,10 @@ onUnmounted(() => {
 .task-button {
     display: flex;
     align-items: center;
-    margin: 0;
-    padding-left: 3px;
     min-width: 50px;
     max-width: 200px;
     flex: 1;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    font-family: var(--font-family-title);
-    font-size: var(--font-size-title);
     padding: 2px 6px;
     height: 30px;
 }

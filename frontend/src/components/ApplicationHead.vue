@@ -101,9 +101,6 @@ const toolbarButtons = [
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 0px;
-    margin: 0;
-    box-sizing: border-box;
     background: silver; /* стандартный win98-фон */
     border-top: 2px solid #fff;
     border-left: 2px solid #fff;
@@ -132,8 +129,6 @@ const toolbarButtons = [
     align-items: center;
     justify-content: center;
     gap: 2px;
-    background: transparent;
-    border: none;
     cursor: pointer;
     padding: 2px 10px;
     min-width: 48px;

@@ -95,11 +95,6 @@ function getZIndex(id) {
 </script>
 
 <style>
-.wrapper {
-  width: 100%;
-  max-width: 560px;
-}
-
 .title-bar {
     user-select: none;
 }
@@ -129,7 +124,6 @@ function getZIndex(id) {
     display: flex;
     align-items: center; 
     height: 100%;
-    margin: 0 0px;
 }
 
 .separator.push-right {
@@ -152,7 +146,6 @@ function getZIndex(id) {
     border-left: white 1px solid;
     border-right: #808080 1px solid;
     border-bottom: #808080 1px solid;
-    padding-left: 0;
     margin: 2px;
 }
 

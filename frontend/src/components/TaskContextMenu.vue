@@ -42,14 +42,9 @@ defineEmits(['close'])
     white-space: nowrap;
 }
 
-.menu-item:hover:not(.disabled) {
-    background: #0a246a;
+.menu-item:hover {
+    background: var(--color-highlight);
     color: #fff;
-}
-
-.menu-item.disabled {
-    color: #808080;
-    cursor: default;
 }
 
 .menu-item--default {
