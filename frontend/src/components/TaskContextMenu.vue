@@ -43,7 +43,7 @@ defineEmits(['close'])
 }
 
 .menu-item:hover {
-    background: #0a246a;
+    background: var(--color-highlight);
     color: #fff;
 }
 

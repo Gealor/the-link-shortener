@@ -128,8 +128,6 @@ defineExpose({
 
 <style scoped>
 .my-computer {
-    flex: 1;
-    min-height: 0;
     display: flex;
     align-items: stretch;
 }

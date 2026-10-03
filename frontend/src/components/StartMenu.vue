@@ -88,7 +88,7 @@ const items = [
     font-weight: bold;
     font-size: 16px;
     letter-spacing: 1px;
-    font-family: "Pixelated MS Sans Serif", serif;
+    font-family: var(--font-family-default);
     user-select: none;
 }
 

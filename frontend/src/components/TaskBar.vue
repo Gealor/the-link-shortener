@@ -196,7 +196,7 @@ onUnmounted(() => {
 .quick-launch .btn-icon {
     box-sizing: content-box; /* чтобы padding не сжимал саму картинку*/
     padding: 4px;
-    margin: 0px; /* компенсируем padding, чтобы соседние иконки не раздвигались */
+    margin: 0; /* перебиваем margin-right из общего .btn-icon (App.vue), чтобы иконки шли вплотную */
     cursor: pointer;
 }
 
