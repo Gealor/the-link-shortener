@@ -159,7 +159,6 @@ defineExpose({
     font-size: 24px;
     font-weight: bold;
     line-height: 1.15;
-    margin: 0;
 }
 
 .info-divider {
@@ -178,7 +177,6 @@ defineExpose({
 .info-desc {
     font-size: 11px;
     line-height: 1.4;
-    margin: 0;
 }
 
 .icon-grid {

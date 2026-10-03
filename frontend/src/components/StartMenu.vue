@@ -101,7 +101,6 @@ const items = [
     flex: 1;
     list-style: none;
     padding: 2px;
-    margin: 0;
 }
 
 .menu-list hr {

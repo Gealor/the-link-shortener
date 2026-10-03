@@ -182,7 +182,6 @@ onUnmounted(() => {
     align-items: center;
     gap: 4px;
     padding: 2px 4px;
-    box-sizing: border-box;
     background: silver; /* стандартный win98-фон */
     border-top: 1px solid #fff;
 }
