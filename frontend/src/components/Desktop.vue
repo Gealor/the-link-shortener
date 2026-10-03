@@ -51,6 +51,8 @@ function open(id) {
     grid-auto-flow: column;
     grid-template-rows: repeat(auto-fill, 75px);
     grid-auto-columns: 75px;
+    /* display: flex;
+    flex-direction: row; */
     gap: 4px;
     padding: 8px;
     justify-content: start;
