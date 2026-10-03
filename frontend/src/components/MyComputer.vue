@@ -140,7 +140,7 @@ defineExpose({
     align-items: flex-start;
     text-align: left;
     padding: 10px;
-    color: #000;
+    color: var(--text);
 }
 
 .info-header {
@@ -196,7 +196,7 @@ defineExpose({
     padding: 4px;
     cursor: pointer;
     font-size: 11px;
-    color: #000;
+    color: var(--text);
     user-select: none;
 }
 

@@ -8,7 +8,7 @@
                 </div>
             </div>
 
-            <div class="window-body login-shell">
+            <div class="window-body">
                 <menu role="tablist" class="login-tabs">
                     <li
                         v-for="tab in tabs"
@@ -66,11 +66,6 @@ function setMode(newMode) {
 
 .login-window {
     width: 380px;
-}
-
-/* Внешний window-body служит только контейнером для вкладок + панели */
-.login-shell {
-    margin: 8px;
 }
 
 .login-tabs {
