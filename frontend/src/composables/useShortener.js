@@ -27,7 +27,7 @@ export function useShortener() {
         body: { full_url: u },
       })
     } catch (e) {
-      if (!e instanceof ApiError) throw e
+      if (!(e instanceof ApiError)) throw e
       // сессия оборвана сервером — выходим на экран логина, инлайн-ошибку не показываем
       if (e.status === 401) {
         handleUnauthorized()
