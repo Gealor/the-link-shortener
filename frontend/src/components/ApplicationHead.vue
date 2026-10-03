@@ -72,7 +72,7 @@ defineProps({
     includeSearch: { type: Boolean, default: true },
 })
 
-const listTools = ["Edit", "Edit", "View", "Favorites", "Tools", "Help"]
+const listTools = ["File", "Edit", "View", "Favorites", "Tools", "Help"]
 
 // Разделитель указывается прямо в объекте кнопки — рендерится перед ней
 const toolbarButtons = [
