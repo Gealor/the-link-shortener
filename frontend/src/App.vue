@@ -95,11 +95,6 @@ function getZIndex(id) {
 </script>
 
 <style>
-.wrapper {
-  width: 100%;
-  max-width: 560px;
-}
-
 .title-bar {
     user-select: none;
 }
