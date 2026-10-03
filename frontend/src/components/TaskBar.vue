@@ -40,7 +40,7 @@
         <button
             v-for="app in openApps"
             :key="app.id"
-            class="default task-button button-active"
+            class="task-button button-active"
             @click="$emit('focus-app', app.id)"
             @contextmenu.prevent="openTaskContextMenu($event, app.id)"
         >
@@ -209,16 +209,10 @@ onUnmounted(() => {
 .task-button {
     display: flex;
     align-items: center;
-    margin: 0;
-    padding-left: 3px;
     min-width: 50px;
     max-width: 200px;
     flex: 1;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    font-family: var(--font-family-title);
-    font-size: var(--font-size-title);
     padding: 2px 6px;
     height: 30px;
 }
